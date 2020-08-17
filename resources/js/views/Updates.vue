@@ -119,6 +119,7 @@ export default {
 				{ text: "vulnerable_start_time", value: "vulnerable_start_time" },
 				{ text: "vulnerable_end_time", value: "vulnerable_end_time" }
 			],
+			alliance_fetch: [],
 			all_alliance_ids: [
 				99000006,
 				99000008,
@@ -3236,39 +3237,77 @@ export default {
 			this.loading = false;
 		},
 		async getAliianceNames() {
-			// let l = this.all_alliance_ids.length;
-			let l = 500;
-			this.saving_alliances_message = "Getting Alliance Names 0/" + l;
-			for (var i = 0; i < l; i++) {
-				const alliance_names_response = await axios.get(
-					"https://esi.evetech.net/latest/alliances/" +
-						this.all_alliance_ids[i] +
-						"/?datasource=tranquility"
-				);
-				this.alliance_data.push(alliance_names_response.data);
-				this.alliance_message =
-					"Getting Alliance Data: " + this.alliance_data.length + "/" + l;
-
-				if (i == 500) setTimeout(() => {}, 250);
-				if (i == 1000) setTimeout(() => {}, 250);
-				if (i == 1500) setTimeout(() => {}, 250);
-				if (i == 2000) setTimeout(() => {}, 250);
-				if (i == 2500) setTimeout(() => {}, 250);
+			let l = this.all_alliance_ids.length;
+			var start = 0;
+			var end = 0;
+			var loop = Math.round(l / 1000);
+			var lastloop = loop * 1000;
+			var lastloopend = loop * 1000 + (l % 1000);
+			console.log("lastloop:" + lastloop + "-" + lastloopend);
+			for (var x = 0; x < loop; x++) {
+				this.alliance_fetch = [];
+				if (x == 0) {
+					let end = 999;
+					for (var s = start; s <= end; s++) {
+						this.alliance_fetch.push(this.all_alliance_ids[s]);
+					}
+					this.alliance_message = "Getting Alliance Names " + start + "/" + l;
+					const alliance_data_response = await axios.post(
+						"https://esi.evetech.net/latest/universe/names/?datasource=tranquility",
+						this.alliance_fetch
+					);
+					for (var s = start; s <= end; s++) {
+						this.alliance_data.push(alliance_data_response.data[s]);
+					}
+				}
+				if (x > 0) {
+					let start = 1000 * x;
+					let end = 1000 * x + 999;
+					for (var s = start; s <= end; s++) {
+						this.alliance_fetch.push(this.all_alliance_ids[s]);
+					}
+					this.alliance_message = "Getting Alliance Names " + start + "/" + l;
+					const alliance_data_response = await axios.post(
+						"https://esi.evetech.net/latest/universe/names/?datasource=tranquility",
+						this.alliance_fetch
+					);
+					for (var s = start; s <= end; s++) {
+						this.alliance_data.push(alliance_data_response.data[s]);
+					}
+					this.alliance_message = "Getting Alliance Names " + end + "/" + l;
+				}
 			}
+			// LAST LOOP
+			this.alliance_fetch = [];
+			for (var x = lastloop; x < lastloopend; x++) {
+				this.alliance_fetch.push(this.all_alliance_ids[x]);
+				this.alliance_message = "Getting Alliance Names " + start + "/" + l;
+			}
+			const alliance_data_response = await axios.post(
+				"https://esi.evetech.net/latest/universe/names/?datasource=tranquility",
+				this.alliance_fetch
+			);
+			for (var s = lastloop; s <= lastloopend; s++) {
+				this.alliance_data.push(alliance_data_response.data[s]);
+			}
+			this.alliance_message = "Getting Alliance Names " + lastloopend + "/" + l;
 		},
 		async saveAllianceData() {
-      const emptyAlliancesTable = await axios.post('/emptyAlliancesTable');
-      let l = this.alliance_data.length;
-      let c = 1;
+			const emptyAlliancesTable = await axios.post("/emptyAlliancesTable");
+			let l = this.alliance_data.length;
+			let c = 1;
 			this.saving_alliances_message = "Saving Alliance Names 0/" + l;
 			for (var i = 0; i < l; i++) {
 				let fd = new FormData();
 				fd.append("id", this.all_alliance_ids[i]);
 				fd.append("name", this.alliance_data[i].name);
 				fd.append("ticker", this.alliance_data[i].ticker);
-				const alliance_names_response = await axios.post("/saveAllianceData", fd);
-        this.saving_alliances_message = "Saving Alliance Names " + c + "/" + l;
-        c++;
+				const alliance_names_response = await axios.post(
+					"/saveAllianceData",
+					fd
+				);
+				this.saving_alliances_message = "Saving Alliance Names " + c + "/" + l;
+				c++;
 				// console.log(this.alliance_data[i]);
 			}
 		},
