@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use App\User;
 use App\Latest;
+use App\Alliance;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -45,5 +46,19 @@ class AppController extends Controller
       ]);
     }
     return response('Latest Updated!!!', Response::HTTP_OK);
+  }
+
+  public function emptyAlliancesTable()
+  {
+    DB::table('alliances')->truncate();
+  }
+
+  public function saveAllianceData(Request $request)
+  {
+    $new = Alliance::create([
+      'id' => $request->get('id'),
+      'name' => $request->get('name'),
+      'ticker' => $request->get('ticker'),
+    ]);
   }
 }
