@@ -17025,18 +17025,6 @@ img {
   border-radius: 4px !important;
 }
 
-.v-app-bar {
-  background-color: white !important;
-}
-
-.v-main {
-  background-color: white;
-}
-
-.page-content {
-  background-color: white;
-}
-
 .v-breadcrumbs a,
 #pageview p a {
   color: teal !important;

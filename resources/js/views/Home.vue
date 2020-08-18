@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<div class="container pt-md-6rem">
+		<v-container>
       <v-icon class="mr-2 grey--text lighten-1">fa fa-rocket</v-icon>HOME
-    </div>
+		</v-container>
 	</div>
 </template>
 <script>

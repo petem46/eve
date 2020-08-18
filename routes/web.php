@@ -9,6 +9,8 @@ Auth::routes();
 // Route::get('/home', 'HomeController@index')->name('home');
 // Route::get('/', 'HomeController@index')->name('home');
 
+Route::get('/getAlliances', 'AllianceController@getAlliances');
+
 Route::post('/emptyAlliancesTable', 'AppController@emptyAlliancesTable');
 Route::post('/saveAllianceData', 'AppController@saveAllianceData');
 

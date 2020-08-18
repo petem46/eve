@@ -1,6 +1,6 @@
 <template>
 	<v-app id="teamfcat">
-		<v-navigation-drawer stateless v-model="navdrawer" app fixed clipped floating light>
+		<v-navigation-drawer stateless v-model="navdrawer" app fixed clipped floating>
 			<v-list dense nav shaped>
 				<v-list-item link to="/">
 					<v-list-item-action>
@@ -10,20 +10,20 @@
 						<v-list-item-title class="grey--text">Home</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
-				<v-list-item link>
+				<v-list-item link to="/updates">
 					<v-list-item-action>
 						<v-icon class="grey--icon grey--text">mdi-view-dashboard</v-icon>
 					</v-list-item-action>
 					<v-list-item-content>
-						<v-list-item-title class="grey--text">Menu</v-list-item-title>
+						<v-list-item-title class="grey--text">Updates</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
-				<v-list-item link>
+				<v-list-item link to="/alliances">
 					<v-list-item-action>
 						<v-icon class="grey--icon grey--text">mdi-view-dashboard</v-icon>
 					</v-list-item-action>
 					<v-list-item-content>
-						<v-list-item-title class="grey--text">Menu</v-list-item-title>
+						<v-list-item-title class="grey--text">Alliances</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
 				<v-list-item link>
@@ -45,14 +45,14 @@
 			</v-list>
 		</v-navigation-drawer>
 
-		<v-app-bar height="100px" app clipped-left elevate-on-scroll white class="top-border--teal">
+		<v-app-bar height="100px" app clipped-left elevate-on-scroll class="top-border--teal">
 			<!-- <v-app-bar app clipped-left flat hide-on-scroll scroll-threshold="500" class="top-border--teal"> -->
 			<v-app-bar-nav-icon @click.stop="navdrawer = !navdrawer"></v-app-bar-nav-icon>
-			<v-toolbar-title class="pl-1 teal--text" >
-				<v-avatar :size="avatarsize" tile class="mr-3 teal--text">
-					<v-icon color="teal">fa fa-rocket</v-icon>
-				</v-avatar>
+			<v-toolbar-title class="pl-15" >
 				<span class>Eve App</span>
+				<v-avatar :size="avatarsize" tile class="">
+					<v-icon color="">fa fa-rocket fa-sm</v-icon>
+				</v-avatar>
 			</v-toolbar-title>
 			<v-spacer></v-spacer>
 

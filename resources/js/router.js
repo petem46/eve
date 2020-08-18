@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 import Updates from './views/Updates'
+import Alliances from './views/Alliances'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/updates',
       name: 'updates',
       component: Updates
+    },
+    {
+      path: '/alliances',
+      name: 'alliances',
+      component: Alliances
     }
   ],
   // scrollBehavior(to, from, savedPosition) {

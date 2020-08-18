@@ -31,7 +31,8 @@ export default new Vuetify({
       primary: colors.teal,
       warning: "#F57C00",
       "dark-orange": "#F57C00"
-    }
+    },
+    dark: true,
   },
   icons: {
     iconfont: "fa"
