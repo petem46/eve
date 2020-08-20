@@ -16,7 +16,7 @@
 				</v-card-text>
 				<v-data-table :headers="headers" :items="alliances" item-key="id" :loading="loading" :search="search" sort-by="name" must-sort>
 					<template v-slot:item.name="{ item }">
-						<v-icon class="mr-3">fab fa-connectdevelop</v-icon>
+						<v-icon class="mr-3 blue--text">fab fa-connectdevelop</v-icon>
 						{{item.name}}
 					</template>
 					<template v-slot:item.actions="{ item }">
@@ -31,8 +31,6 @@
 <script>
 import Axios from "axios";
 import moment from "moment";
-// import VueFilterDateFormat from "@vuejs-community/vue-filter-date-format";
-// import VueFilterDateParse from "@vuejs-community/vue-filter-date-parse";
 export default {
 	data() {
 		return {

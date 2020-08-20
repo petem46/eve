@@ -8,7 +8,7 @@
 				</h1>
 			</v-row>
 			<v-progress-linear indeterminate></v-progress-linear>
-		</div> -->
+		</div>-->
 		<div class="mx-5 pt-md-6rem">
 			<v-row>
 				<h1>
@@ -26,7 +26,12 @@
 					</v-btn>
 				</h1>
 			</v-row>
-			<pre><code v-html="all_alliance_ids"></code></pre>
+			<v-row>
+				<h1>Alliances in ESI Database: {{this.all_alliance_ids.length}}</h1>
+			</v-row>
+			<v-row>
+				<h1>Alliances names pulled from ESI Database: {{this.alliance_data.length}}</h1>
+			</v-row>
 			<v-data-table
 				v-if="getNamesDone == 'eggs'"
 				:headers="headers"
@@ -126,7 +131,7 @@ export default {
 				{ text: "vulnerable_end_time", value: "vulnerable_end_time" }
 			],
 			alliance_fetch: [],
-			all_alliance_ids: [],
+			all_alliance_ids: []
 		};
 	},
 	async mounted() {
@@ -134,9 +139,9 @@ export default {
 		await this.getLatest();
 		// await this.setVulnerable();
 		// await this.getSolarSystemData();
-    await this.getAlliancesIDs();
-    await this.getAllianceNames();
-},
+		await this.getAlliancesIDs();
+		await this.getAllianceNames();
+	},
 	methods: {
 		async getLatest() {
 			this.message = "Getting Latest Data";
@@ -153,13 +158,10 @@ export default {
 			const res = await axios
 				.get("https://esi.evetech.net/latest/alliances/?datasource=tranquility")
 				.then(res => {
-					console.log(res.data);
-					console.log(JSON.stringify(res.data));
-					for (var i = 0; i < res.data.length; i++) {
-						this.all_alliance_ids.push(res.data[i]);
-					}
 					if (res.status == 200) {
-						// this.all_alliance_ids = (JSON.stringify(res.data));
+						for (var i = 0; i < res.data.length; i++) {
+							this.all_alliance_ids.push(res.data[i]);
+						}
 					}
 				});
 		},
@@ -188,8 +190,16 @@ export default {
 					if (alliance_data_response.error) {
 						this.alliance_message = "ERROR";
 					}
-					// console.log(alliance_data_response.data);
 					for (var s = start; s <= end; s++) {
+						// console.log(alliance_data_response.data[s]);
+						if (
+							typeof alliance_data_response.data[s] == "undefined" ||
+							alliance_data_response.data[s] === null
+						) {
+							console.log("F");
+							continue;
+						}
+
 						this.alliance_data.push(alliance_data_response.data[s]);
 					}
 				}
@@ -197,18 +207,23 @@ export default {
 				if (x > 0) {
 					let start = 1000 * x;
 					let end = 1000 * x + 999;
-					console.log(start);
-					console.log(end);
 					for (var s = start; s <= end; s++) {
 						this.alliance_fetch.push(this.all_alliance_ids[s]);
 					}
-					// this.alliance_message = "Getting Alliance Names " + start + "/" + l;
 					const alliance_data_response = await axios.post(
 						"https://esi.evetech.net/latest/universe/names/?datasource=tranquility",
 						this.alliance_fetch
 					);
-					console.log(alliance_data_response.data);
 					for (var s = 0; s <= 1000; s++) {
+						// console.log(alliance_data_response.data[s]);
+						if (
+							typeof alliance_data_response.data[s] == "undefined" ||
+							alliance_data_response.data[s] === null
+						) {
+							console.log("F");
+							continue;
+						}
+
 						this.alliance_data.push(alliance_data_response.data[s]);
 					}
 					this.alliance_message = "Getting Alliance Names " + end + "/" + l;
@@ -218,18 +233,24 @@ export default {
 			this.alliance_fetch = [];
 			for (var x = lastloop; x < lastloopend; x++) {
 				this.alliance_fetch.push(this.all_alliance_ids[x]);
-				// this.alliance_message = "Getting Alliance Names " + start + "/" + l;
 			}
 			const alliance_data_response = await axios.post(
 				"https://esi.evetech.net/latest/universe/names/?datasource=tranquility",
 				this.alliance_fetch
 			);
-			console.log(alliance_data_response.data);
 			for (var s = 0; s <= lastloopcount; s++) {
+				// console.log(alliance_data_response.data[s]);
+				if (
+					typeof alliance_data_response.data[s] == "undefined" ||
+					alliance_data_response.data[s] === null
+				) {
+					console.log("F");
+					continue;
+				}
+
 				this.alliance_data.push(alliance_data_response.data[s]);
 			}
 			this.alliance_message = "Getting Alliance Names " + lastloopend + "/" + l;
-			console.log(this.alliance_data);
 		},
 		async saveAllianceData() {
 			const emptyAlliancesTable = await axios.post("/emptyAlliancesTable");

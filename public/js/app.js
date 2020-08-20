@@ -2807,8 +2807,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
- // import VueFilterDateFormat from "@vuejs-community/vue-filter-date-format";
-// import VueFilterDateParse from "@vuejs-community/vue-filter-date-parse";
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3168,6 +3166,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
 
 
  // import VueFilterDateFormat from "@vuejs-community/vue-filter-date-format";
@@ -3286,14 +3289,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this3.all_alliance_ids = [];
                 _context3.next = 3;
                 return axios.get("https://esi.evetech.net/latest/alliances/?datasource=tranquility").then(function (res) {
-                  console.log(res.data);
-                  console.log(JSON.stringify(res.data));
-
-                  for (var i = 0; i < res.data.length; i++) {
-                    _this3.all_alliance_ids.push(res.data[i]);
-                  }
-
-                  if (res.status == 200) {// this.all_alliance_ids = (JSON.stringify(res.data));
+                  if (res.status == 200) {
+                    for (var i = 0; i < res.data.length; i++) {
+                      _this3.all_alliance_ids.push(res.data[i]);
+                    }
                   }
                 });
 
@@ -3331,14 +3330,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 9:
                 if (!(x < loop)) {
-                  _context4.next = 35;
+                  _context4.next = 48;
                   break;
                 }
 
                 _this4.alliance_fetch = [];
 
                 if (!(x == 0)) {
-                  _context4.next = 20;
+                  _context4.next = 28;
                   break;
                 }
 
@@ -3357,71 +3356,123 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 if (_alliance_data_response.error) {
                   _this4.alliance_message = "ERROR";
-                } // console.log(alliance_data_response.data);
-
-
-                for (s = start; s <= _end; s++) {
-                  _this4.alliance_data.push(_alliance_data_response.data[s]);
                 }
 
+                s = start;
+
               case 20:
+                if (!(s <= _end)) {
+                  _context4.next = 28;
+                  break;
+                }
+
+                if (!(typeof _alliance_data_response.data[s] == "undefined" || _alliance_data_response.data[s] === null)) {
+                  _context4.next = 24;
+                  break;
+                }
+
+                console.log("F");
+                return _context4.abrupt("continue", 25);
+
+              case 24:
+                _this4.alliance_data.push(_alliance_data_response.data[s]);
+
+              case 25:
+                s++;
+                _context4.next = 20;
+                break;
+
+              case 28:
                 if (!(x > 0)) {
-                  _context4.next = 32;
+                  _context4.next = 45;
                   break;
                 }
 
                 _start = 1000 * x;
                 _end2 = 1000 * x + 999;
-                console.log(_start);
-                console.log(_end2);
 
                 for (s = _start; s <= _end2; s++) {
                   _this4.alliance_fetch.push(_this4.all_alliance_ids[s]);
-                } // this.alliance_message = "Getting Alliance Names " + start + "/" + l;
-
-
-                _context4.next = 28;
-                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
-
-              case 28:
-                _alliance_data_response2 = _context4.sent;
-                console.log(_alliance_data_response2.data);
-
-                for (s = 0; s <= 1000; s++) {
-                  _this4.alliance_data.push(_alliance_data_response2.data[s]);
                 }
 
+                _context4.next = 34;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
+
+              case 34:
+                _alliance_data_response2 = _context4.sent;
+                s = 0;
+
+              case 36:
+                if (!(s <= 1000)) {
+                  _context4.next = 44;
+                  break;
+                }
+
+                if (!(typeof _alliance_data_response2.data[s] == "undefined" || _alliance_data_response2.data[s] === null)) {
+                  _context4.next = 40;
+                  break;
+                }
+
+                console.log("F");
+                return _context4.abrupt("continue", 41);
+
+              case 40:
+                _this4.alliance_data.push(_alliance_data_response2.data[s]);
+
+              case 41:
+                s++;
+                _context4.next = 36;
+                break;
+
+              case 44:
                 _this4.alliance_message = "Getting Alliance Names " + _end2 + "/" + l;
 
-              case 32:
+              case 45:
                 x++;
                 _context4.next = 9;
                 break;
 
-              case 35:
+              case 48:
                 // LAST LOOP - GET REMAINDER lastloopcount IDS
                 _this4.alliance_fetch = [];
 
                 for (x = lastloop; x < lastloopend; x++) {
-                  _this4.alliance_fetch.push(_this4.all_alliance_ids[x]); // this.alliance_message = "Getting Alliance Names " + start + "/" + l;
-
+                  _this4.alliance_fetch.push(_this4.all_alliance_ids[x]);
                 }
 
-                _context4.next = 39;
+                _context4.next = 52;
                 return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
 
-              case 39:
+              case 52:
                 alliance_data_response = _context4.sent;
-                console.log(alliance_data_response.data);
+                s = 0;
 
-                for (s = 0; s <= lastloopcount; s++) {
-                  _this4.alliance_data.push(alliance_data_response.data[s]);
+              case 54:
+                if (!(s <= lastloopcount)) {
+                  _context4.next = 62;
+                  break;
                 }
 
-                _this4.alliance_message = "Getting Alliance Names " + lastloopend + "/" + l;
-                console.log(_this4.alliance_data);
+                if (!(typeof alliance_data_response.data[s] == "undefined" || alliance_data_response.data[s] === null)) {
+                  _context4.next = 58;
+                  break;
+                }
 
-              case 44:
+                console.log("F");
+                return _context4.abrupt("continue", 59);
+
+              case 58:
+                _this4.alliance_data.push(alliance_data_response.data[s]);
+
+              case 59:
+                s++;
+                _context4.next = 54;
+                break;
+
+              case 62:
+                _this4.alliance_message = "Getting Alliance Names " + lastloopend + "/" + l;
+
+              case 63:
               case "end":
                 return _context4.stop();
             }
@@ -62204,7 +62255,7 @@ var render = function() {
                     fn: function(ref) {
                       var item = ref.item
                       return [
-                        _c("v-icon", { staticClass: "mr-3" }, [
+                        _c("v-icon", { staticClass: "mr-3 blue--text" }, [
                           _vm._v("fab fa-connectdevelop")
                         ]),
                         _vm._v(
@@ -62828,10 +62879,22 @@ var render = function() {
             )
           ]),
           _vm._v(" "),
-          _c("pre", [
-            _c("code", {
-              domProps: { innerHTML: _vm._s(_vm.all_alliance_ids) }
-            })
+          _c("v-row", [
+            _c("h1", [
+              _vm._v(
+                "Alliances in ESI Database: " +
+                  _vm._s(this.all_alliance_ids.length)
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("v-row", [
+            _c("h1", [
+              _vm._v(
+                "Alliances names pulled from ESI Database: " +
+                  _vm._s(this.alliance_data.length)
+              )
+            ])
           ]),
           _vm._v(" "),
           _vm.getNamesDone == "eggs"
@@ -111486,7 +111549,7 @@ function () {
 
   Vuetify.install = _install__WEBPACK_IMPORTED_MODULE_0__["install"];
   Vuetify.installed = false;
-  Vuetify.version = "2.3.8";
+  Vuetify.version = "2.3.9";
   Vuetify.config = {
     silent: false
   };
@@ -121643,14 +121706,6 @@ var __read = undefined && undefined.__read || function (o, n) {
   return ar;
 };
 
-var __spread = undefined && undefined.__spread || function () {
-  for (var ar = [], i = 0; i < arguments.length; i++) {
-    ar = ar.concat(__read(arguments[i]));
-  }
-
-  return ar;
-};
-
 
 var pattern = {
   styleList: /;(?![^(]*\))/g,
@@ -121814,40 +121869,35 @@ function mergeClasses(target, source) {
   if (!target) return source;
   return target ? Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["wrapInArray"])(target).concat(source) : source;
 }
-function mergeListeners(target, source) {
-  var e_3, _a, _b;
+function mergeListeners() {
+  var args = [];
 
-  if (!target) return source;
-  if (!source) return target;
-  var event;
+  for (var _i = 0; _i < arguments.length; _i++) {
+    args[_i] = arguments[_i];
+  }
 
-  try {
-    for (var _c = __values(Object.keys(source)), _d = _c.next(); !_d.done; _d = _c.next()) {
-      event = _d.value; // Concat function to array of functions if callback present.
+  if (!args[0]) return args[1];
+  if (!args[1]) return args[0];
+  var dest = {};
 
-      if (target[event]) {
-        // Insert current iteration data in beginning of merged array.
-        target[event] = Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["wrapInArray"])(target[event]);
+  for (var i = 2; i--;) {
+    var arg = args[i];
 
-        (_b = target[event]).push.apply(_b, __spread(Object(_helpers__WEBPACK_IMPORTED_MODULE_0__["wrapInArray"])(source[event])));
+    for (var event in arg) {
+      if (!arg[event]) continue;
+
+      if (dest[event]) {
+        // Merge current listeners before (because we are iterating backwards).
+        // Note that neither "target" or "source" must be altered.
+        dest[event] = [].concat(arg[event], dest[event]);
       } else {
         // Straight assign.
-        target[event] = source[event];
+        dest[event] = arg[event];
       }
-    }
-  } catch (e_3_1) {
-    e_3 = {
-      error: e_3_1
-    };
-  } finally {
-    try {
-      if (_d && !_d.done && (_a = _c.return)) _a.call(_c);
-    } finally {
-      if (e_3) throw e_3.error;
     }
   }
 
-  return target;
+  return dest;
 }
 
 /***/ }),
