@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Alliance extends Model
+class System extends Model
 {
     protected $fillable = [
       'id',

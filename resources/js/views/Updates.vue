@@ -1,85 +1,107 @@
 <template>
 	<div>
-		<!-- <div v-if="!getNamesDone" class="container pt-md-6rem">
-			<v-row>
-				<h1>
-					<v-progress-circular indeterminate class="mr-5"></v-progress-circular>
-					{{this.message}}
-				</h1>
-			</v-row>
-			<v-progress-linear indeterminate></v-progress-linear>
-		</div>-->
-		<div class="mx-5 pt-md-6rem">
-			<v-row>
-				<h1>
-					LATEST DATA
-					<v-btn @click="getAlliancesIDs()" class="ml-3">
-						<v-icon class="mr-3 grey--text lighten-1">fa fa-sync</v-icon>getAlliancesIDs
-					</v-btn>
-					<v-btn @click="getAllianceNames()" class="ml-3">
-						<v-icon class="mr-3 grey--text lighten-1">fa fa-sync</v-icon>
-						{{alliance_message}}
-					</v-btn>
-					<v-btn :loading="saving_alliance_data" @click="saveAllianceData()" class="ml-3">
-						<v-icon class="mr-3 grey--text lighten-1">fa fa-save</v-icon>
-						{{saving_alliances_message}}
-					</v-btn>
-				</h1>
-			</v-row>
-			<v-row>
-				<h1>Alliances in ESI Database: {{this.all_alliance_ids.length}}</h1>
-			</v-row>
-			<v-row>
-				<h1>Alliances names pulled from ESI Database: {{this.alliance_data.length}}</h1>
-			</v-row>
-			<v-data-table
-				v-if="getNamesDone == 'eggs'"
-				:headers="headers"
-				:items="info"
-				:loading="!getNamesDone"
-				loading-text="Loading... Please wait"
-				item-key="key"
-				class="elevation-1"
-			>
-				<template v-slot:item.alliance_name="{ item }">
-					{{
-					item.alliance_name
-					}}
-				</template>
-				<template v-slot:item.system_name="{ item }">
-					<v-chip>
-						{{
-						item.system_name
+		<div class="ma-5">
+			<p>
+				<span v-if="loading && !fetching_names" class="ml-3 text-overline orange--text">
+					Contacting ESI EveTech API :: Downloading data...
+					<v-icon class="mx-3 orange--text">fas fa-satellite-dish fa-sm fa-fw</v-icon>
+				</span>
+				<span class="ml-3 text-overline green--text" v-if="fetching_names || fetching_systems">
+					ESI EveTech API Connection :: Successful
+					<v-icon class="mx-3 green--text">fas fa-check fa-sm fa-fw</v-icon>
+				</span>
+			</p>
+			<p>
+				<span class="ml-3 text-overline blue--text" v-if="fetching_names && !fetching_systems">
+					ESI EveTech API Contection Success... Acquiring Alliance Data :: {{this.alliance_data.length}}/{{this.all_alliance_ids.length}}
+					<v-icon class="mx-3 blue--text">fa fa-cloud-download-alt fa-sm fa-fw</v-icon>
+				</span>
+				<span class="ml-3 text-overline green--text" v-if="fetching_systems">
+					ESI EveTech API Data Compilation Complete :: {{this.alliance_data.length}}/{{this.all_alliance_ids.length}}
+					<v-icon class="mx-3 green--text">fas fa-check fa-sm fa-fw</v-icon>
+				</span>
+			</p>
+			<p>
+				<span class="ml-3 text-overline orange--text" v-if="fetching_systems">
+					Contacting ESI EveTech API :: Acquiring System Data... {{this.system_data.length}}
+					<v-icon class="mx-3 orange--text">fas fa-network-wired fa-sm fa-fw</v-icon>
+				</span>
+				<!-- <span
+					class="ml-3 text-overline green--text"
+					v-if="!loading && !fetching_names && !fetching_systems"
+				>
+					ESI EveTech API Data Compilation Complete :: {{this.system_data.length}}/{{this.system_data.length}}
+					<v-icon class="mx-3 green--text">fas fa-check fa-sm fa-fw</v-icon>
+				</span>-->
+			</p>
+			<v-card v-if="loading">
+				<v-progress-linear indeterminate color="blue"></v-progress-linear>
+			</v-card>
+			<v-card v-if="!loading && !fetching_names && !fetching_systems">
+				<v-card-title>Sovereignty Structure Vulnerability Data</v-card-title>
+				<v-card-text>
+					<v-text-field
+						v-model="search"
+						append-icon="fa fa-search"
+						label="Search"
+						single-line
+						hide-details
+					></v-text-field>
+				</v-card-text>
+				<v-data-table
+					:loading="fetching_names && loading && fetching_systems"
+					loading-text="Downloading data from ESI EveTech..."
+					:headers="headers"
+					:items="info"
+					item-key="key"
+					class="elevation-1"
+					:search="search"
+					sort-by="name"
+					must-sort
+				>
+					<template v-slot:item.name="{ item }">
+						<v-icon v-if="endCounterDown(item) > 0" color="red" class="mr-3">mdi-death-star-variant</v-icon>
+						<v-icon v-if="startCounterDown(item) > 0" color="green" class="mr-3">mdi-shield-star-outline</v-icon>
+            {{
+						item.name
 						}}
-					</v-chip>
-				</template>
-				<template v-slot:item.vulnerable_start_time="{ item }">
-					<countdown
-						v-if="startCounterDown(item) > 0"
-						:time="startCounterDown(item)"
-						auto-start
-						class="red--text"
-					>
-						<template slot-scope="props">
-							Vulnerable In: {{ props.days }} days, {{ props.hours }} hours,
-							{{ props.minutes }} minutes,
-							{{ props.seconds }} seconds.
-						</template>
-					</countdown>
-					<countdown
-						v-if="endCounterDown(item) > 0"
-						:time="endCounterDown(item)"
-						auto-start
-						class="teal--text"
-					>
-						<template slot-scope="props">
-							Vulnerable Remaining: {{ props.days }} days,
-							{{ props.hours }} hours, {{ props.minutes }} minutes,
-							{{ props.seconds }} seconds.
-						</template>
-					</countdown>
-				</template>
-			</v-data-table>
+					</template>
+					<template v-slot:item.system_name="{ item }">
+						<v-icon color="yellow" class="mr-3">mdi-star-four-points-outline</v-icon>
+						<span class="yellow--text">
+							{{
+							item.system_name
+							}}
+						</span>
+					</template>
+					<template v-slot:item.vulnerable_start_time="{ item }">
+						<countdown
+							v-if="startCounterDown(item) > 0"
+							:time="startCounterDown(item)"
+							auto-start
+							class="yellow--text"
+						>
+							<template slot-scope="props">
+								Warning: {{ props.days }} days, {{ props.hours }} hours,
+								{{ props.minutes }} minutes,
+								{{ props.seconds }} seconds until in danger
+							</template>
+						</countdown>
+						<countdown
+							v-if="endCounterDown(item) > 0"
+							:time="endCounterDown(item)"
+							auto-start
+							class="red--text"
+						>
+							<template slot-scope="props">
+								Vulnerable - {{ props.days }} days,
+								{{ props.hours }} hours, {{ props.minutes }} minutes,
+								{{ props.seconds }} seconds remaining
+							</template>
+						</countdown>
+					</template>
+				</v-data-table>
+			</v-card>
 		</div>
 		<v-dialog v-model="saving" persistent max-width="290">
 			<v-card class="top-border--teal text-center">
@@ -103,110 +125,128 @@ export default {
 	data() {
 		return {
 			loading: true,
-			message: "Loading...",
-			alliance_message: "Waiting...",
-			saving_alliances_message: "Ready...",
-			saving_alliance_data: false,
-			getNamesDone: false,
+			search: "",
+			fetching_ids: false,
+			fetching_names: false,
+			fetching_systems: false,
 			saving: false,
 			info: [],
-			info_length: 0,
 			response: null,
+			all_alliance_ids: [],
+			all_system_ids: [],
+			system_fetch_ids: [],
+			system_fetch: [],
+			alliance_fetch: [],
 			alliance_data: [],
-			alliance_data_length: 0,
+			systems: [],
 			system_data: [],
 			system_data_length: 0,
 			alliance_response: null,
 			systems_response: null,
 			headers: [
-				{ text: "alliance_name", value: "alliance_name" },
-				{ text: "system_name", value: "system_name" },
-				{ text: "structure__id", value: "structure_id" },
-				{ text: "structure_type_name", value: "structure_type_name" },
+				{ text: "Designation", value: "name", width: "35%" },
+				{ text: "System", value: "system_name" },
+				// { text: "structure__id", value: "structure_id" },
+				{ text: "Structure type", value: "structure_type_name" },
 				{
-					text: "vulnerability_occupancy_level",
+					text: "Occupancy Level",
 					value: "vulnerability_occupancy_level"
 				},
-				{ text: "vulnerable_start_time", value: "vulnerable_start_time" },
-				{ text: "vulnerable_end_time", value: "vulnerable_end_time" }
-			],
-			alliance_fetch: [],
-			all_alliance_ids: []
+				{ text: "Vulnerable Start Time", value: "vulnerable_start_time" }
+				// { text: "Vulernable End Time", value: "vulnerable_end_time" }
+			]
 		};
 	},
 	async mounted() {
-		console.log("MOUNTED");
+		this.loading = true;
 		await this.getLatest();
-		// await this.setVulnerable();
-		// await this.getSolarSystemData();
+		// await this.getSystems();
 		await this.getAlliancesIDs();
 		await this.getAllianceNames();
+		await this.getSystemIDs();
+		await this.getSystemNames();
+		await this.setStructureTypes();
+		await this.matchLatesttoNames();
+		this.loading = false;
 	},
 	methods: {
 		async getLatest() {
-			this.message = "Getting Latest Data";
 			this.loading = true;
+			this.message = "Getting Latest Data";
 			this.response = await axios.get(
 				"https://esi.evetech.net/dev/sovereignty/structures/?datasource=tranquility"
 			);
 			this.info = this.response.data;
 			this.info_length = this.info.length;
-			this.loading = false;
+		},
+		async getSystems() {
+			this.loading = true;
+			await axios.get("/getSystems").then(res => {
+				if (res.status == 200) {
+					this.systems = res.data.systems;
+				}
+				// this.loading = false;
+			});
 		},
 		async getAlliancesIDs() {
+			this.fetching_ids = true;
 			this.all_alliance_ids = [];
 			const res = await axios
-				.get("https://esi.evetech.net/latest/alliances/?datasource=tranquility")
+				.get("https://esi.evetech.net/dev/alliances/?datasource=tranquility")
 				.then(res => {
 					if (res.status == 200) {
 						for (var i = 0; i < res.data.length; i++) {
 							this.all_alliance_ids.push(res.data[i]);
 						}
 					}
+					console.log(res.status);
 				});
+			this.fetching_ids = false;
 		},
 		async getAllianceNames() {
+			this.fetching_names = true;
 			this.alliance_data = [];
 			let l = this.all_alliance_ids.length;
 			var start = 0;
 			var end = 0;
-			var loop = Math.round(l / 1000);
-			var lastloop = loop * 1000;
-			var lastloopend = loop * 1000 + (l % 1000);
-			var lastloopcount = l % 1000;
-			// GET FIRST 1000
+			var loop = Math.round(l / 500);
+			var lastloop = loop * 500;
+			var lastloopend = loop * 500 + (l % 500);
+			var lastloopcount = l % 500;
+			// GET FIRST 500
 			for (var x = 0; x < loop; x++) {
 				this.alliance_fetch = [];
 				if (x == 0) {
-					let end = 999;
+					let end = 499;
 					for (var s = start; s <= end; s++) {
 						this.alliance_fetch.push(this.all_alliance_ids[s]);
 					}
 					this.alliance_message = "Getting Alliance Names " + start + "/" + l;
-					const alliance_data_response = await axios.post(
-						"https://esi.evetech.net/latest/universe/names/?datasource=tranquility",
-						this.alliance_fetch
-					);
-					if (alliance_data_response.error) {
-						this.alliance_message = "ERROR";
-					}
-					for (var s = start; s <= end; s++) {
-						// console.log(alliance_data_response.data[s]);
-						if (
-							typeof alliance_data_response.data[s] == "undefined" ||
-							alliance_data_response.data[s] === null
-						) {
-							console.log("F");
-							continue;
-						}
-
-						this.alliance_data.push(alliance_data_response.data[s]);
-					}
+					const alliance_data_response = await axios
+						.post(
+							"https://esi.evetech.net/dev/universe/names/?datasource=tranquility",
+							this.alliance_fetch
+						)
+						.then(alliance_data_response => {
+							console.log(alliance_data_response.status);
+							if (alliance_data_response.status == 200) {
+								for (var s = start; s <= end; s++) {
+									if (
+										typeof alliance_data_response.data[s] == "undefined" ||
+										alliance_data_response.data[s] === null
+									) {
+										console.log("F");
+										continue;
+									}
+									this.alliance_data.push(alliance_data_response.data[s]);
+								}
+							}
+						});
 				}
-				// LOOP GET NEXT x 1000 FOR loop TIMES
+				// LOOP GET NEXT x 500 FOR loop TIMES
 				if (x > 0) {
-					let start = 1000 * x;
-					let end = 1000 * x + 999;
+					let start = 500 * x;
+					let end = 500 * x + 499;
 					for (var s = start; s <= end; s++) {
 						this.alliance_fetch.push(this.all_alliance_ids[s]);
 					}
@@ -214,7 +254,7 @@ export default {
 						"https://esi.evetech.net/latest/universe/names/?datasource=tranquility",
 						this.alliance_fetch
 					);
-					for (var s = 0; s <= 1000; s++) {
+					for (var s = 0; s <= 500; s++) {
 						// console.log(alliance_data_response.data[s]);
 						if (
 							typeof alliance_data_response.data[s] == "undefined" ||
@@ -226,7 +266,6 @@ export default {
 
 						this.alliance_data.push(alliance_data_response.data[s]);
 					}
-					this.alliance_message = "Getting Alliance Names " + end + "/" + l;
 				}
 			}
 			// LAST LOOP - GET REMAINDER lastloopcount IDS
@@ -239,7 +278,6 @@ export default {
 				this.alliance_fetch
 			);
 			for (var s = 0; s <= lastloopcount; s++) {
-				// console.log(alliance_data_response.data[s]);
 				if (
 					typeof alliance_data_response.data[s] == "undefined" ||
 					alliance_data_response.data[s] === null
@@ -250,43 +288,138 @@ export default {
 
 				this.alliance_data.push(alliance_data_response.data[s]);
 			}
-			this.alliance_message = "Getting Alliance Names " + lastloopend + "/" + l;
+			this.alliance_fetch = [];
 		},
-		async saveAllianceData() {
-			const emptyAlliancesTable = await axios.post("/emptyAlliancesTable");
-			this.saving_alliance_data = true;
-			const alliance_names_response = await axios.post(
-				"/saveAllianceData",
-				this.alliance_data
-			);
-			this.saving_alliance_data = false;
-		},
-		async getSolarSystemData() {
-			this.message = "Getting Solar System Names 0/" + this.info_length;
-			this.getNamesDone = false;
+		matchLatesttoNames() {
+			// console.log(item)
+			this.fetching_names = true;
 			let l = this.info.length;
 			for (var i = 0; i < l; i++) {
-				const systems_response = await axios.get(
-					"https://esi.evetech.net/latest/universe/systems/" +
-						this.info[i].solar_system_id +
-						"/?datasource=tranquility"
-				);
-				this.systems_response = systems_response.data;
-				this.info[i].system_name = this.systems_response.name;
-				this.system_data.push(this.systems_response);
-				this.system_data_length = this.system_data.length;
-				this.message =
-					"Getting Solar System Names " +
-					this.system_data_length +
-					"/" +
-					this.info_length;
+				if (typeof this.info[i] == "undefined" || this.info[i] === null) {
+					continue;
+				}
+				this.info[i].name = this.alliance_data.find(
+					({ id }) => id === this.info[i].alliance_id
+				).name;
+				this.info[i].system_name = this.system_data.find(
+					({ id }) => id === this.info[i].solar_system_id
+				).name;
 			}
-			this.getNamesDone = true;
-			this.message = "Done";
+			this.fetching_names = false;
+		},
+		async getSystemIDs() {
+			this.fetching_systems = true;
+			this.all_system_ids = [];
+			let l = this.info.length;
+			for (var i = 0; i < l; i++) {
+				if (
+					typeof this.info[i] == "undefined" ||
+					this.info[i] === null ||
+					this.info[i].solar_system_id == "None"
+				) {
+					console.log("F");
+					continue;
+				}
+				if (Number.isInteger(this.info[i].solar_system_id)) {
+					this.all_system_ids.push(this.info[i].solar_system_id);
+				}
+			}
+			this.system_fetch_ids = Array.from(new Set(this.all_system_ids));
+		},
+		async xgetSystemNames() {
+			let l = this.system_fetch_ids.length;
+			for (var i = 0; i < l; i++) {
+				if (!Number.isInteger(this.system_fetch_ids[i])) {
+					console.log("F-".this.system_fetch_ids[i]);
+				}
+			}
+		},
+		async getSystemNames() {
+			this.fetching_systems = true;
+			this.system_data = [];
+			let l = this.system_fetch_ids.length;
+			var start = 0;
+			var end = 0;
+			var loop = Math.round(l / 500);
+			var lastloop = loop * 500;
+			var lastloopend = loop * 500 + (l % 500);
+			var lastloopcount = l % 500;
+			// GET FIRST 500
+			for (var x = 0; x < loop; x++) {
+				this.system_fetch = [];
+				if (x == 0) {
+					let end = 499;
+					for (var s = start; s <= end; s++) {
+						this.system_fetch.push(this.system_fetch_ids[s]);
+					}
+					this.alliance_message = "Getting Alliance Names " + start + "/" + l;
+					const system_data_response = await axios.post(
+						"https://esi.evetech.net/v2/universe/names/?datasource=tranquility",
+						this.system_fetch
+					);
+					if (system_data_response.error) {
+						this.alliance_message = "ERROR";
+					}
+					for (var s = start; s <= end; s++) {
+						if (
+							typeof system_data_response.data[s] == "undefined" ||
+							system_data_response.data[s] === null
+						) {
+							console.log("F");
+							continue;
+						}
+						this.system_data.push(system_data_response.data[s]);
+					}
+				}
+				// LOOP GET NEXT x 500 FOR loop TIMES
+				if (x > 0) {
+					let start = 500 * x;
+					let end = 500 * x + 499;
+					for (var s = start; s <= end; s++) {
+						this.system_fetch.push(this.system_fetch_ids[s]);
+					}
+					const system_data_response = await axios.post(
+						"https://esi.evetech.net/v2/universe/names/?datasource=tranquility",
+						this.system_fetch
+					);
+					for (var s = 0; s <= 500; s++) {
+						// console.log(system_data_response.data[s]);
+						if (
+							typeof system_data_response.data[s] == "undefined" ||
+							system_data_response.data[s] === null
+						) {
+							console.log("F");
+							continue;
+						}
+
+						this.system_data.push(system_data_response.data[s]);
+					}
+				}
+			}
+			// LAST LOOP - GET REMAINDER lastloopcount IDS
+			this.system_fetch = [];
+			for (var x = lastloop; x < lastloopend; x++) {
+				this.system_fetch.push(this.system_fetch_ids[x]);
+			}
+			const system_data_response = await axios.post(
+				"https://esi.evetech.net/v2/universe/names/?datasource=tranquility",
+				this.system_fetch
+			);
+			for (var s = 0; s <= lastloopcount; s++) {
+				if (
+					typeof system_data_response.data[s] == "undefined" ||
+					system_data_response.data[s] === null
+				) {
+					console.log("F");
+					continue;
+				}
+
+				this.system_data.push(system_data_response.data[s]);
+			}
+			this.system_fetch = [];
+			this.fetching_systems = false;
 		},
 		async setStructureTypes() {
-			this.message = "Getting Solar System Names 0/" + this.info_length;
-			this.getNamesDone = false;
 			let l = this.info.length;
 			for (var i = 0; i < l; i++) {
 				if (this.info[i].structure_type_id == "32226") {
@@ -296,16 +429,6 @@ export default {
 					this.info[i].structure_type_name = "IHUB";
 				}
 			}
-			this.getNamesDone = true;
-			this.message = "Done";
-		},
-		saveLatest() {
-			this.saving = true;
-			this.loading = true;
-			axios.post("/saveLatest", this.response).then(res => {
-				this.saving = false;
-				this.loading = false;
-			});
 		},
 		startCounterDown(item) {
 			var today = new Date();

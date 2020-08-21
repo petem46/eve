@@ -10,12 +10,16 @@ Auth::routes();
 // Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/getAlliances', 'AllianceController@getAlliances');
+Route::post('/emptyAlliancesTable', 'AllianceController@emptyAlliancesTable');
+Route::post('/saveAllianceData', 'AllianceController@saveAllianceData');
 
-Route::post('/emptyAlliancesTable', 'AppController@emptyAlliancesTable');
-Route::post('/saveAllianceData', 'AppController@saveAllianceData');
+Route::get('/getSystems', 'SystemController@getSystems');
+Route::post('/emptySystemsTable', 'SystemController@emptySystemsTable');
+Route::post('/saveSystemData', 'SystemController@saveSystemData');
 
 Route::post('/saveLatest', 'AppController@saveLatest');
 
 Route::get('/{any}', 'AppController@index')->where('any', '.*');
+
 Route::group(['middleware' => ['auth']], function () {
 });

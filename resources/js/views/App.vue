@@ -26,12 +26,12 @@
 						<v-list-item-title class="grey--text">Alliances</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
-				<v-list-item link>
+				<v-list-item link to="/systems">
 					<v-list-item-action>
 						<v-icon class="grey--icon grey--text">mdi-view-dashboard</v-icon>
 					</v-list-item-action>
 					<v-list-item-content>
-						<v-list-item-title class="grey--text">Menu</v-list-item-title>
+						<v-list-item-title class="grey--text">Systems</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
 				<v-list-item link>
@@ -45,7 +45,7 @@
 			</v-list>
 		</v-navigation-drawer>
 
-		<v-app-bar height="100px" app clipped-left elevate-on-scroll class="top-border--teal">
+		<v-app-bar height="100px" app clipped-left elevate-on-scroll class="top-border--orange">
 			<!-- <v-app-bar app clipped-left flat hide-on-scroll scroll-threshold="500" class="top-border--teal"> -->
 			<v-app-bar-nav-icon @click.stop="navdrawer = !navdrawer"></v-app-bar-nav-icon>
 			<v-toolbar-title class="pl-15" >

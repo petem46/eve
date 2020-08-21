@@ -48,30 +48,5 @@ class AppController extends Controller
     return response('Latest Updated!!!', Response::HTTP_OK);
   }
 
-  public function emptyAlliancesTable()
-  {
-    DB::table('alliances')->truncate();
-  }
 
-  public function saveAllianceData(Request $request)
-  {
-    $data = $request->json()->all();
-    foreach ($data as $alliance) {
-      if (isset($alliance['id'])) {
-        $id = $alliance['id'];
-        $name = $alliance['name'];
-        $ticker = $alliance['name'];
-        $id = isset($id) ? $id : '2000';
-        $name = isset($name) ? $name : 'Err 2000 ERROR';
-        $ticker = isset($ticker) ? $ticker : 'Check API Call Loop at 2000 ERROR';
-        $new = Alliance::updateOrCreate([
-          'id' => $id,
-          'name' => $name,
-          'ticker' => $ticker,
-        ]);
-      } else {
-        continue;
-      }
-    }
-  }
 }

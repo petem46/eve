@@ -3,25 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
-use App\Alliance;
+use App\System;
 use Illuminate\Http\Request;
 
-class AllianceController extends Controller
+class SystemController extends Controller
 {
-  public function getAlliances()
+  public function getSystems()
   {
     $data = [
-      'alliances' => Alliance::get(),
+      'systems' => System::get(),
     ];
     return $data;
   }
 
-  public function emptyAlliancesTable()
+  public function emptySystemsTable()
   {
-    DB::table('alliances')->truncate();
+    DB::table('systems')->truncate();
   }
 
-  public function saveAllianceData(Request $request)
+  public function saveSystemData(Request $request)
   {
     $data = $request->json()->all();
     foreach ($data as $alliance) {
@@ -32,7 +32,7 @@ class AllianceController extends Controller
         $id = isset($id) ? $id : '2000';
         $name = isset($name) ? $name : 'Err 2000 ERROR';
         $category = isset($category) ? $category : 'Check API Call Loop at 2000 ERROR';
-        $new = Alliance::updateOrCreate([
+        $new = System::updateOrCreate([
           'id' => $id,
           'name' => $name,
           'category' => $category,

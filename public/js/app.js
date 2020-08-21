@@ -2772,10 +2772,50 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2812,34 +2852,318 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       loading: true,
-      message: "Loading...",
-      alliance_message: "Waiting...",
+      fetching_ids: true,
+      fetching_names: true,
       alliances: [],
+      all_alliance_ids: [],
+      alliance_data: [],
       headers: [{
-        text: "Alliance Name",
+        text: "Designation",
         value: "name",
-        width: "80%"
+        width: "60%"
+      }, {
+        text: "Identification Code",
+        value: "id",
+        width: "20%"
       }, {
         text: "",
-        value: "actions"
+        value: "actions",
+        width: "20%"
       }],
       search: ""
     };
   },
   mounted: function mounted() {
-    this.getAlliances();
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _this.loading = true;
+              _context.next = 3;
+              return _this.getAlliances();
+
+            case 3:
+              _context.next = 5;
+              return _this.getAlliancesIDs();
+
+            case 5:
+              _context.next = 7;
+              return _this.getAllianceNames();
+
+            case 7:
+              // get all alliance names from ESI Tech API
+              _this.loading = false;
+
+            case 8:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
   },
   methods: {
     getAlliances: function getAlliances() {
-      var _this = this;
+      var _this2 = this;
 
-      this.loading = true;
-      axios.get("/getAlliances").then(function (res) {
-        if (res.status == 200) {
-          _this.alliances = res.data.alliances;
-          _this.loading = false;
-        }
-      });
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this2.loading = true;
+                _context2.next = 3;
+                return axios.get("/getAlliances").then(function (res) {
+                  if (res.status == 200) {
+                    _this2.alliances = res.data.alliances;
+                  }
+
+                  _this2.loading = false;
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    getAlliancesIDs: function getAlliancesIDs() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this3.fetching_ids = true;
+                _this3.all_alliance_ids = [];
+                _context3.next = 4;
+                return axios.get("https://esi.evetech.net/latest/alliances/?datasource=tranquility").then(function (res) {
+                  if (res.status == 200) {
+                    for (var i = 0; i < res.data.length; i++) {
+                      _this3.all_alliance_ids.push(res.data[i]);
+                    }
+                  }
+                });
+
+              case 4:
+                res = _context3.sent;
+                _this3.fetching_ids = false;
+
+              case 6:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    getAllianceNames: function getAllianceNames() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var l, start, end, loop, lastloop, lastloopend, lastloopcount, x, _end, s, _alliance_data_response, _start, _end2, _alliance_data_response2, alliance_data_response;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this4.fetching_names = true;
+                _this4.alliance_data = [];
+                l = _this4.all_alliance_ids.length;
+                start = 0;
+                end = 0;
+                loop = Math.round(l / 1000);
+                lastloop = loop * 1000;
+                lastloopend = loop * 1000 + l % 1000;
+                lastloopcount = l % 1000; // GET FIRST 1000
+
+                x = 0;
+
+              case 10:
+                if (!(x < loop)) {
+                  _context4.next = 48;
+                  break;
+                }
+
+                _this4.alliance_fetch = [];
+
+                if (!(x == 0)) {
+                  _context4.next = 29;
+                  break;
+                }
+
+                _end = 999;
+
+                for (s = start; s <= _end; s++) {
+                  _this4.alliance_fetch.push(_this4.all_alliance_ids[s]);
+                }
+
+                _this4.alliance_message = "Getting Alliance Names " + start + "/" + l;
+                _context4.next = 18;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
+
+              case 18:
+                _alliance_data_response = _context4.sent;
+
+                if (_alliance_data_response.error) {
+                  _this4.alliance_message = "ERROR";
+                }
+
+                s = start;
+
+              case 21:
+                if (!(s <= _end)) {
+                  _context4.next = 29;
+                  break;
+                }
+
+                if (!(typeof _alliance_data_response.data[s] == "undefined" || _alliance_data_response.data[s] === null)) {
+                  _context4.next = 25;
+                  break;
+                }
+
+                console.log("F");
+                return _context4.abrupt("continue", 26);
+
+              case 25:
+                _this4.alliance_data.push(_alliance_data_response.data[s]);
+
+              case 26:
+                s++;
+                _context4.next = 21;
+                break;
+
+              case 29:
+                if (!(x > 0)) {
+                  _context4.next = 45;
+                  break;
+                }
+
+                _start = 1000 * x;
+                _end2 = 1000 * x + 999;
+
+                for (s = _start; s <= _end2; s++) {
+                  _this4.alliance_fetch.push(_this4.all_alliance_ids[s]);
+                }
+
+                _context4.next = 35;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
+
+              case 35:
+                _alliance_data_response2 = _context4.sent;
+                s = 0;
+
+              case 37:
+                if (!(s <= 1000)) {
+                  _context4.next = 45;
+                  break;
+                }
+
+                if (!(typeof _alliance_data_response2.data[s] == "undefined" || _alliance_data_response2.data[s] === null)) {
+                  _context4.next = 41;
+                  break;
+                }
+
+                console.log("F");
+                return _context4.abrupt("continue", 42);
+
+              case 41:
+                _this4.alliance_data.push(_alliance_data_response2.data[s]);
+
+              case 42:
+                s++;
+                _context4.next = 37;
+                break;
+
+              case 45:
+                x++;
+                _context4.next = 10;
+                break;
+
+              case 48:
+                // LAST LOOP - GET REMAINDER lastloopcount IDS
+                _this4.alliance_fetch = [];
+
+                for (x = lastloop; x < lastloopend; x++) {
+                  _this4.alliance_fetch.push(_this4.all_alliance_ids[x]);
+                }
+
+                _context4.next = 52;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
+
+              case 52:
+                alliance_data_response = _context4.sent;
+                s = 0;
+
+              case 54:
+                if (!(s <= lastloopcount)) {
+                  _context4.next = 62;
+                  break;
+                }
+
+                if (!(typeof alliance_data_response.data[s] == "undefined" || alliance_data_response.data[s] === null)) {
+                  _context4.next = 58;
+                  break;
+                }
+
+                console.log("F");
+                return _context4.abrupt("continue", 59);
+
+              case 58:
+                _this4.alliance_data.push(alliance_data_response.data[s]);
+
+              case 59:
+                s++;
+                _context4.next = 54;
+                break;
+
+              case 62:
+                _this4.fetching_names = false;
+
+              case 63:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    saveAllianceData: function saveAllianceData() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var emptyAlliancesTable, alliance_names_response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return axios.post("/emptyAlliancesTable");
+
+              case 2:
+                emptyAlliancesTable = _context5.sent;
+                _this5.saving_alliance_data = true;
+                _context5.next = 6;
+                return axios.post("/saveAllianceData", _this5.alliance_data);
+
+              case 6:
+                alliance_names_response = _context5.sent;
+                _this5.saving_alliance_data = false;
+
+              case 8:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
     }
   }
 });
@@ -3053,6 +3377,414 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Systems.vue?vue&type=script&lang=js&":
+/*!*************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Systems.vue?vue&type=script&lang=js& ***!
+  \*************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      loading: true,
+      fetching_ids: true,
+      fetching_names: true,
+      systems: [],
+      all_system_ids: [],
+      system_data: [],
+      headers: [{
+        text: "Designation",
+        value: "name",
+        width: "60%"
+      }, {
+        text: "Identification Code",
+        value: "id",
+        width: "20%"
+      }, {
+        text: "",
+        value: "actions",
+        width: "20%"
+      }],
+      search: ""
+    };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _this.loading = true;
+              _context.next = 3;
+              return _this.getSystems();
+
+            case 3:
+              _context.next = 5;
+              return _this.getSystemsIDs();
+
+            case 5:
+              _context.next = 7;
+              return _this.getSystemNames();
+
+            case 7:
+              // get all system names from ESI Tech API
+              _this.loading = false;
+
+            case 8:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
+  methods: {
+    getSystems: function getSystems() {
+      var _this2 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _this2.loading = true;
+                _context2.next = 3;
+                return axios.get("/getSystems").then(function (res) {
+                  if (res.status == 200) {
+                    _this2.systems = res.data.systems;
+                  }
+
+                  _this2.loading = false;
+                });
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
+    },
+    getSystemsIDs: function getSystemsIDs() {
+      var _this3 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var res;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _this3.fetching_ids = true;
+                _this3.all_system_ids = [];
+                _context3.next = 4;
+                return axios.get("https://esi.evetech.net/latest/universe/systems/?datasource=tranquility").then(function (res) {
+                  if (res.status == 200) {
+                    for (var i = 0; i < res.data.length; i++) {
+                      _this3.all_system_ids.push(res.data[i]);
+                    }
+                  }
+                });
+
+              case 4:
+                res = _context3.sent;
+                _this3.fetching_ids = false;
+
+              case 6:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
+    },
+    getSystemNames: function getSystemNames() {
+      var _this4 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var l, start, end, loop, lastloop, lastloopend, lastloopcount, x, _end, s, _system_data_response, _start, _end2, _system_data_response2, system_data_response;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _this4.fetching_names = true;
+                _this4.system_data = [];
+                l = _this4.all_system_ids.length;
+                start = 0;
+                end = 0;
+                loop = Math.round(l / 1000);
+                lastloop = loop * 1000;
+                lastloopend = loop * 1000 + l % 1000;
+                lastloopcount = l % 1000; // GET FIRST 1000
+
+                x = 0;
+
+              case 10:
+                if (!(x < loop)) {
+                  _context4.next = 48;
+                  break;
+                }
+
+                _this4.system_fetch = [];
+
+                if (!(x == 0)) {
+                  _context4.next = 29;
+                  break;
+                }
+
+                _end = 999;
+
+                for (s = start; s <= _end; s++) {
+                  _this4.system_fetch.push(_this4.all_system_ids[s]);
+                }
+
+                _this4.system_message = "Getting System Names " + start + "/" + l;
+                _context4.next = 18;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.system_fetch);
+
+              case 18:
+                _system_data_response = _context4.sent;
+
+                if (_system_data_response.error) {
+                  _this4.system_message = "ERROR";
+                }
+
+                s = start;
+
+              case 21:
+                if (!(s <= _end)) {
+                  _context4.next = 29;
+                  break;
+                }
+
+                if (!(typeof _system_data_response.data[s] == "undefined" || _system_data_response.data[s] === null)) {
+                  _context4.next = 25;
+                  break;
+                }
+
+                console.log("F");
+                return _context4.abrupt("continue", 26);
+
+              case 25:
+                _this4.system_data.push(_system_data_response.data[s]);
+
+              case 26:
+                s++;
+                _context4.next = 21;
+                break;
+
+              case 29:
+                if (!(x > 0)) {
+                  _context4.next = 45;
+                  break;
+                }
+
+                _start = 1000 * x;
+                _end2 = 1000 * x + 999;
+
+                for (s = _start; s <= _end2; s++) {
+                  _this4.system_fetch.push(_this4.all_system_ids[s]);
+                }
+
+                _context4.next = 35;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.system_fetch);
+
+              case 35:
+                _system_data_response2 = _context4.sent;
+                s = 0;
+
+              case 37:
+                if (!(s <= 1000)) {
+                  _context4.next = 45;
+                  break;
+                }
+
+                if (!(typeof _system_data_response2.data[s] == "undefined" || _system_data_response2.data[s] === null)) {
+                  _context4.next = 41;
+                  break;
+                }
+
+                console.log("F");
+                return _context4.abrupt("continue", 42);
+
+              case 41:
+                _this4.system_data.push(_system_data_response2.data[s]);
+
+              case 42:
+                s++;
+                _context4.next = 37;
+                break;
+
+              case 45:
+                x++;
+                _context4.next = 10;
+                break;
+
+              case 48:
+                // LAST LOOP - GET REMAINDER lastloopcount IDS
+                _this4.system_fetch = [];
+
+                for (x = lastloop; x < lastloopend; x++) {
+                  _this4.system_fetch.push(_this4.all_system_ids[x]);
+                }
+
+                _context4.next = 52;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.system_fetch);
+
+              case 52:
+                system_data_response = _context4.sent;
+                s = 0;
+
+              case 54:
+                if (!(s <= lastloopcount)) {
+                  _context4.next = 62;
+                  break;
+                }
+
+                if (!(typeof system_data_response.data[s] == "undefined" || system_data_response.data[s] === null)) {
+                  _context4.next = 58;
+                  break;
+                }
+
+                console.log("F");
+                return _context4.abrupt("continue", 59);
+
+              case 58:
+                _this4.system_data.push(system_data_response.data[s]);
+
+              case 59:
+                s++;
+                _context4.next = 54;
+                break;
+
+              case 62:
+                _this4.fetching_names = false;
+
+              case 63:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
+    },
+    saveSystemData: function saveSystemData() {
+      var _this5 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var emptySystemsTable, system_names_response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return axios.post("/emptySystemsTable");
+
+              case 2:
+                emptySystemsTable = _context5.sent;
+                _this5.saving_system_data = true;
+                _context5.next = 6;
+                return axios.post("/saveSystemData", _this5.system_data);
+
+              case 6:
+                system_names_response = _context5.sent;
+                _this5.saving_system_data = false;
+
+              case 8:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }))();
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Updates.vue?vue&type=script&lang=js&":
 /*!*************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Updates.vue?vue&type=script&lang=js& ***!
@@ -3171,6 +3903,28 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
  // import VueFilterDateFormat from "@vuejs-community/vue-filter-date-format";
@@ -3180,45 +3934,43 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   data: function data() {
     return {
       loading: true,
-      message: "Loading...",
-      alliance_message: "Waiting...",
-      saving_alliances_message: "Ready...",
-      saving_alliance_data: false,
-      getNamesDone: false,
+      search: "",
+      fetching_ids: false,
+      fetching_names: false,
+      fetching_systems: false,
       saving: false,
       info: [],
-      info_length: 0,
       response: null,
+      all_alliance_ids: [],
+      all_system_ids: [],
+      system_fetch_ids: [],
+      system_fetch: [],
+      alliance_fetch: [],
       alliance_data: [],
-      alliance_data_length: 0,
+      systems: [],
       system_data: [],
       system_data_length: 0,
       alliance_response: null,
       systems_response: null,
       headers: [{
-        text: "alliance_name",
-        value: "alliance_name"
+        text: "Designation",
+        value: "name",
+        width: "35%"
       }, {
-        text: "system_name",
+        text: "System",
         value: "system_name"
-      }, {
-        text: "structure__id",
-        value: "structure_id"
-      }, {
-        text: "structure_type_name",
+      }, // { text: "structure__id", value: "structure_id" },
+      {
+        text: "Structure type",
         value: "structure_type_name"
       }, {
-        text: "vulnerability_occupancy_level",
+        text: "Occupancy Level",
         value: "vulnerability_occupancy_level"
       }, {
-        text: "vulnerable_start_time",
+        text: "Vulnerable Start Time",
         value: "vulnerable_start_time"
-      }, {
-        text: "vulnerable_end_time",
-        value: "vulnerable_end_time"
-      }],
-      alliance_fetch: [],
-      all_alliance_ids: []
+      } // { text: "Vulernable End Time", value: "vulnerable_end_time" }
+      ]
     };
   },
   mounted: function mounted() {
@@ -3229,7 +3981,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              console.log("MOUNTED");
+              _this.loading = true;
               _context.next = 3;
               return _this.getLatest();
 
@@ -3242,6 +3994,25 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               return _this.getAllianceNames();
 
             case 7:
+              _context.next = 9;
+              return _this.getSystemIDs();
+
+            case 9:
+              _context.next = 11;
+              return _this.getSystemNames();
+
+            case 11:
+              _context.next = 13;
+              return _this.setStructureTypes();
+
+            case 13:
+              _context.next = 15;
+              return _this.matchLatesttoNames();
+
+            case 15:
+              _this.loading = false;
+
+            case 16:
             case "end":
               return _context.stop();
           }
@@ -3258,8 +4029,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _this2.message = "Getting Latest Data";
                 _this2.loading = true;
+                _this2.message = "Getting Latest Data";
                 _context2.next = 4;
                 return axios.get("https://esi.evetech.net/dev/sovereignty/structures/?datasource=tranquility");
 
@@ -3267,9 +4038,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.response = _context2.sent;
                 _this2.info = _this2.response.data;
                 _this2.info_length = _this2.info.length;
-                _this2.loading = false;
 
-              case 8:
+              case 7:
               case "end":
                 return _context2.stop();
             }
@@ -3277,29 +4047,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2);
       }))();
     },
-    getAlliancesIDs: function getAlliancesIDs() {
+    getSystems: function getSystems() {
       var _this3 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
             switch (_context3.prev = _context3.next) {
               case 0:
-                _this3.all_alliance_ids = [];
+                _this3.loading = true;
                 _context3.next = 3;
-                return axios.get("https://esi.evetech.net/latest/alliances/?datasource=tranquility").then(function (res) {
+                return axios.get("/getSystems").then(function (res) {
                   if (res.status == 200) {
-                    for (var i = 0; i < res.data.length; i++) {
-                      _this3.all_alliance_ids.push(res.data[i]);
-                    }
-                  }
+                    _this3.systems = res.data.systems;
+                  } // this.loading = false;
+
                 });
 
               case 3:
-                res = _context3.sent;
-
-              case 4:
               case "end":
                 return _context3.stop();
             }
@@ -3307,172 +4072,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3);
       }))();
     },
-    getAllianceNames: function getAllianceNames() {
+    getAlliancesIDs: function getAlliancesIDs() {
       var _this4 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var l, start, end, loop, lastloop, lastloopend, lastloopcount, x, _end, s, _alliance_data_response, _start, _end2, _alliance_data_response2, alliance_data_response;
-
+        var res;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                _this4.alliance_data = [];
-                l = _this4.all_alliance_ids.length;
-                start = 0;
-                end = 0;
-                loop = Math.round(l / 1000);
-                lastloop = loop * 1000;
-                lastloopend = loop * 1000 + l % 1000;
-                lastloopcount = l % 1000; // GET FIRST 1000
+                _this4.fetching_ids = true;
+                _this4.all_alliance_ids = [];
+                _context4.next = 4;
+                return axios.get("https://esi.evetech.net/dev/alliances/?datasource=tranquility").then(function (res) {
+                  if (res.status == 200) {
+                    for (var i = 0; i < res.data.length; i++) {
+                      _this4.all_alliance_ids.push(res.data[i]);
+                    }
+                  }
 
-                x = 0;
+                  console.log(res.status);
+                });
 
-              case 9:
-                if (!(x < loop)) {
-                  _context4.next = 48;
-                  break;
-                }
+              case 4:
+                res = _context4.sent;
+                _this4.fetching_ids = false;
 
-                _this4.alliance_fetch = [];
-
-                if (!(x == 0)) {
-                  _context4.next = 28;
-                  break;
-                }
-
-                _end = 999;
-
-                for (s = start; s <= _end; s++) {
-                  _this4.alliance_fetch.push(_this4.all_alliance_ids[s]);
-                }
-
-                _this4.alliance_message = "Getting Alliance Names " + start + "/" + l;
-                _context4.next = 17;
-                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
-
-              case 17:
-                _alliance_data_response = _context4.sent;
-
-                if (_alliance_data_response.error) {
-                  _this4.alliance_message = "ERROR";
-                }
-
-                s = start;
-
-              case 20:
-                if (!(s <= _end)) {
-                  _context4.next = 28;
-                  break;
-                }
-
-                if (!(typeof _alliance_data_response.data[s] == "undefined" || _alliance_data_response.data[s] === null)) {
-                  _context4.next = 24;
-                  break;
-                }
-
-                console.log("F");
-                return _context4.abrupt("continue", 25);
-
-              case 24:
-                _this4.alliance_data.push(_alliance_data_response.data[s]);
-
-              case 25:
-                s++;
-                _context4.next = 20;
-                break;
-
-              case 28:
-                if (!(x > 0)) {
-                  _context4.next = 45;
-                  break;
-                }
-
-                _start = 1000 * x;
-                _end2 = 1000 * x + 999;
-
-                for (s = _start; s <= _end2; s++) {
-                  _this4.alliance_fetch.push(_this4.all_alliance_ids[s]);
-                }
-
-                _context4.next = 34;
-                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
-
-              case 34:
-                _alliance_data_response2 = _context4.sent;
-                s = 0;
-
-              case 36:
-                if (!(s <= 1000)) {
-                  _context4.next = 44;
-                  break;
-                }
-
-                if (!(typeof _alliance_data_response2.data[s] == "undefined" || _alliance_data_response2.data[s] === null)) {
-                  _context4.next = 40;
-                  break;
-                }
-
-                console.log("F");
-                return _context4.abrupt("continue", 41);
-
-              case 40:
-                _this4.alliance_data.push(_alliance_data_response2.data[s]);
-
-              case 41:
-                s++;
-                _context4.next = 36;
-                break;
-
-              case 44:
-                _this4.alliance_message = "Getting Alliance Names " + _end2 + "/" + l;
-
-              case 45:
-                x++;
-                _context4.next = 9;
-                break;
-
-              case 48:
-                // LAST LOOP - GET REMAINDER lastloopcount IDS
-                _this4.alliance_fetch = [];
-
-                for (x = lastloop; x < lastloopend; x++) {
-                  _this4.alliance_fetch.push(_this4.all_alliance_ids[x]);
-                }
-
-                _context4.next = 52;
-                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this4.alliance_fetch);
-
-              case 52:
-                alliance_data_response = _context4.sent;
-                s = 0;
-
-              case 54:
-                if (!(s <= lastloopcount)) {
-                  _context4.next = 62;
-                  break;
-                }
-
-                if (!(typeof alliance_data_response.data[s] == "undefined" || alliance_data_response.data[s] === null)) {
-                  _context4.next = 58;
-                  break;
-                }
-
-                console.log("F");
-                return _context4.abrupt("continue", 59);
-
-              case 58:
-                _this4.alliance_data.push(alliance_data_response.data[s]);
-
-              case 59:
-                s++;
-                _context4.next = 54;
-                break;
-
-              case 62:
-                _this4.alliance_message = "Getting Alliance Names " + lastloopend + "/" + l;
-
-              case 63:
+              case 6:
               case "end":
                 return _context4.stop();
             }
@@ -3480,79 +4106,169 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
-    saveAllianceData: function saveAllianceData() {
+    getAllianceNames: function getAllianceNames() {
       var _this5 = this;
 
-      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        var emptyAlliancesTable, alliance_names_response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.next = 2;
-                return axios.post("/emptyAlliancesTable");
-
-              case 2:
-                emptyAlliancesTable = _context5.sent;
-                _this5.saving_alliance_data = true;
-                _context5.next = 6;
-                return axios.post("/saveAllianceData", _this5.alliance_data);
-
-              case 6:
-                alliance_names_response = _context5.sent;
-                _this5.saving_alliance_data = false;
-
-              case 8:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5);
-      }))();
-    },
-    getSolarSystemData: function getSolarSystemData() {
-      var _this6 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        var l, i, systems_response;
+        var l, start, end, loop, lastloop, lastloopend, lastloopcount, x, s, _start, _end, _alliance_data_response, alliance_data_response;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
           while (1) {
             switch (_context6.prev = _context6.next) {
               case 0:
-                _this6.message = "Getting Solar System Names 0/" + _this6.info_length;
-                _this6.getNamesDone = false;
-                l = _this6.info.length;
-                i = 0;
+                _this5.fetching_names = true;
+                _this5.alliance_data = [];
+                l = _this5.all_alliance_ids.length;
+                start = 0;
+                end = 0;
+                loop = Math.round(l / 500);
+                lastloop = loop * 500;
+                lastloopend = loop * 500 + l % 500;
+                lastloopcount = l % 500; // GET FIRST 500
 
-              case 4:
-                if (!(i < l)) {
-                  _context6.next = 16;
+                x = 0;
+
+              case 10:
+                if (!(x < loop)) {
+                  _context6.next = 33;
                   break;
                 }
 
-                _context6.next = 7;
-                return axios.get("https://esi.evetech.net/latest/universe/systems/" + _this6.info[i].solar_system_id + "/?datasource=tranquility");
+                _this5.alliance_fetch = [];
 
-              case 7:
-                systems_response = _context6.sent;
-                _this6.systems_response = systems_response.data;
-                _this6.info[i].system_name = _this6.systems_response.name;
+                if (!(x == 0)) {
+                  _context6.next = 14;
+                  break;
+                }
 
-                _this6.system_data.push(_this6.systems_response);
+                return _context6.delegateYield( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+                  var end, alliance_data_response;
+                  return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+                    while (1) {
+                      switch (_context5.prev = _context5.next) {
+                        case 0:
+                          end = 499;
 
-                _this6.system_data_length = _this6.system_data.length;
-                _this6.message = "Getting Solar System Names " + _this6.system_data_length + "/" + _this6.info_length;
+                          for (s = start; s <= end; s++) {
+                            _this5.alliance_fetch.push(_this5.all_alliance_ids[s]);
+                          }
 
-              case 13:
-                i++;
-                _context6.next = 4;
+                          _this5.alliance_message = "Getting Alliance Names " + start + "/" + l;
+                          _context5.next = 5;
+                          return axios.post("https://esi.evetech.net/dev/universe/names/?datasource=tranquility", _this5.alliance_fetch).then(function (alliance_data_response) {
+                            console.log(alliance_data_response.status);
+
+                            if (alliance_data_response.status == 200) {
+                              for (var s = start; s <= end; s++) {
+                                if (typeof alliance_data_response.data[s] == "undefined" || alliance_data_response.data[s] === null) {
+                                  console.log("F");
+                                  continue;
+                                }
+
+                                _this5.alliance_data.push(alliance_data_response.data[s]);
+                              }
+                            }
+                          });
+
+                        case 5:
+                          alliance_data_response = _context5.sent;
+
+                        case 6:
+                        case "end":
+                          return _context5.stop();
+                      }
+                    }
+                  }, _callee5);
+                })(), "t0", 14);
+
+              case 14:
+                if (!(x > 0)) {
+                  _context6.next = 30;
+                  break;
+                }
+
+                _start = 500 * x;
+                _end = 500 * x + 499;
+
+                for (s = _start; s <= _end; s++) {
+                  _this5.alliance_fetch.push(_this5.all_alliance_ids[s]);
+                }
+
+                _context6.next = 20;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this5.alliance_fetch);
+
+              case 20:
+                _alliance_data_response = _context6.sent;
+                s = 0;
+
+              case 22:
+                if (!(s <= 500)) {
+                  _context6.next = 30;
+                  break;
+                }
+
+                if (!(typeof _alliance_data_response.data[s] == "undefined" || _alliance_data_response.data[s] === null)) {
+                  _context6.next = 26;
+                  break;
+                }
+
+                console.log("F");
+                return _context6.abrupt("continue", 27);
+
+              case 26:
+                _this5.alliance_data.push(_alliance_data_response.data[s]);
+
+              case 27:
+                s++;
+                _context6.next = 22;
                 break;
 
-              case 16:
-                _this6.getNamesDone = true;
-                _this6.message = "Done";
+              case 30:
+                x++;
+                _context6.next = 10;
+                break;
 
-              case 18:
+              case 33:
+                // LAST LOOP - GET REMAINDER lastloopcount IDS
+                _this5.alliance_fetch = [];
+
+                for (x = lastloop; x < lastloopend; x++) {
+                  _this5.alliance_fetch.push(_this5.all_alliance_ids[x]);
+                }
+
+                _context6.next = 37;
+                return axios.post("https://esi.evetech.net/latest/universe/names/?datasource=tranquility", _this5.alliance_fetch);
+
+              case 37:
+                alliance_data_response = _context6.sent;
+                s = 0;
+
+              case 39:
+                if (!(s <= lastloopcount)) {
+                  _context6.next = 47;
+                  break;
+                }
+
+                if (!(typeof alliance_data_response.data[s] == "undefined" || alliance_data_response.data[s] === null)) {
+                  _context6.next = 43;
+                  break;
+                }
+
+                console.log("F");
+                return _context6.abrupt("continue", 44);
+
+              case 43:
+                _this5.alliance_data.push(alliance_data_response.data[s]);
+
+              case 44:
+                s++;
+                _context6.next = 39;
+                break;
+
+              case 47:
+                _this5.alliance_fetch = [];
+
+              case 48:
               case "end":
                 return _context6.stop();
             }
@@ -3560,7 +4276,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee6);
       }))();
     },
-    setStructureTypes: function setStructureTypes() {
+    matchLatesttoNames: function matchLatesttoNames() {
+      var _this6 = this;
+
+      // console.log(item)
+      this.fetching_names = true;
+      var l = this.info.length;
+
+      for (var i = 0; i < l; i++) {
+        if (typeof this.info[i] == "undefined" || this.info[i] === null) {
+          continue;
+        }
+
+        this.info[i].name = this.alliance_data.find(function (_ref) {
+          var id = _ref.id;
+          return id === _this6.info[i].alliance_id;
+        }).name;
+        this.info[i].system_name = this.system_data.find(function (_ref2) {
+          var id = _ref2.id;
+          return id === _this6.info[i].solar_system_id;
+        }).name;
+      }
+
+      this.fetching_names = false;
+    },
+    getSystemIDs: function getSystemIDs() {
       var _this7 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
@@ -3569,24 +4309,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
-                _this7.message = "Getting Solar System Names 0/" + _this7.info_length;
-                _this7.getNamesDone = false;
+                _this7.fetching_systems = true;
+                _this7.all_system_ids = [];
                 l = _this7.info.length;
+                i = 0;
 
-                for (i = 0; i < l; i++) {
-                  if (_this7.info[i].structure_type_id == "32226") {
-                    _this7.info[i].structure_type_name = "TCU";
-                  }
-
-                  if (_this7.info[i].structure_type_id == "32458") {
-                    _this7.info[i].structure_type_name = "IHUB";
-                  }
+              case 4:
+                if (!(i < l)) {
+                  _context7.next = 12;
+                  break;
                 }
 
-                _this7.getNamesDone = true;
-                _this7.message = "Done";
+                if (!(typeof _this7.info[i] == "undefined" || _this7.info[i] === null || _this7.info[i].solar_system_id == "None")) {
+                  _context7.next = 8;
+                  break;
+                }
 
-              case 6:
+                console.log("F");
+                return _context7.abrupt("continue", 9);
+
+              case 8:
+                if (Number.isInteger(_this7.info[i].solar_system_id)) {
+                  _this7.all_system_ids.push(_this7.info[i].solar_system_id);
+                }
+
+              case 9:
+                i++;
+                _context7.next = 4;
+                break;
+
+              case 12:
+                _this7.system_fetch_ids = Array.from(new Set(_this7.all_system_ids));
+
+              case 13:
               case "end":
                 return _context7.stop();
             }
@@ -3594,15 +4349,231 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee7);
       }))();
     },
-    saveLatest: function saveLatest() {
+    xgetSystemNames: function xgetSystemNames() {
       var _this8 = this;
 
-      this.saving = true;
-      this.loading = true;
-      axios.post("/saveLatest", this.response).then(function (res) {
-        _this8.saving = false;
-        _this8.loading = false;
-      });
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
+        var l, i;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                l = _this8.system_fetch_ids.length;
+
+                for (i = 0; i < l; i++) {
+                  if (!Number.isInteger(_this8.system_fetch_ids[i])) {
+                    console.log("F-"["this"].system_fetch_ids[i]);
+                  }
+                }
+
+              case 2:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8);
+      }))();
+    },
+    getSystemNames: function getSystemNames() {
+      var _this9 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
+        var l, start, end, loop, lastloop, lastloopend, lastloopcount, x, _end2, s, _system_data_response, _start2, _end3, _system_data_response2, system_data_response;
+
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
+          while (1) {
+            switch (_context9.prev = _context9.next) {
+              case 0:
+                _this9.fetching_systems = true;
+                _this9.system_data = [];
+                l = _this9.system_fetch_ids.length;
+                start = 0;
+                end = 0;
+                loop = Math.round(l / 500);
+                lastloop = loop * 500;
+                lastloopend = loop * 500 + l % 500;
+                lastloopcount = l % 500; // GET FIRST 500
+
+                x = 0;
+
+              case 10:
+                if (!(x < loop)) {
+                  _context9.next = 48;
+                  break;
+                }
+
+                _this9.system_fetch = [];
+
+                if (!(x == 0)) {
+                  _context9.next = 29;
+                  break;
+                }
+
+                _end2 = 499;
+
+                for (s = start; s <= _end2; s++) {
+                  _this9.system_fetch.push(_this9.system_fetch_ids[s]);
+                }
+
+                _this9.alliance_message = "Getting Alliance Names " + start + "/" + l;
+                _context9.next = 18;
+                return axios.post("https://esi.evetech.net/v2/universe/names/?datasource=tranquility", _this9.system_fetch);
+
+              case 18:
+                _system_data_response = _context9.sent;
+
+                if (_system_data_response.error) {
+                  _this9.alliance_message = "ERROR";
+                }
+
+                s = start;
+
+              case 21:
+                if (!(s <= _end2)) {
+                  _context9.next = 29;
+                  break;
+                }
+
+                if (!(typeof _system_data_response.data[s] == "undefined" || _system_data_response.data[s] === null)) {
+                  _context9.next = 25;
+                  break;
+                }
+
+                console.log("F");
+                return _context9.abrupt("continue", 26);
+
+              case 25:
+                _this9.system_data.push(_system_data_response.data[s]);
+
+              case 26:
+                s++;
+                _context9.next = 21;
+                break;
+
+              case 29:
+                if (!(x > 0)) {
+                  _context9.next = 45;
+                  break;
+                }
+
+                _start2 = 500 * x;
+                _end3 = 500 * x + 499;
+
+                for (s = _start2; s <= _end3; s++) {
+                  _this9.system_fetch.push(_this9.system_fetch_ids[s]);
+                }
+
+                _context9.next = 35;
+                return axios.post("https://esi.evetech.net/v2/universe/names/?datasource=tranquility", _this9.system_fetch);
+
+              case 35:
+                _system_data_response2 = _context9.sent;
+                s = 0;
+
+              case 37:
+                if (!(s <= 500)) {
+                  _context9.next = 45;
+                  break;
+                }
+
+                if (!(typeof _system_data_response2.data[s] == "undefined" || _system_data_response2.data[s] === null)) {
+                  _context9.next = 41;
+                  break;
+                }
+
+                console.log("F");
+                return _context9.abrupt("continue", 42);
+
+              case 41:
+                _this9.system_data.push(_system_data_response2.data[s]);
+
+              case 42:
+                s++;
+                _context9.next = 37;
+                break;
+
+              case 45:
+                x++;
+                _context9.next = 10;
+                break;
+
+              case 48:
+                // LAST LOOP - GET REMAINDER lastloopcount IDS
+                _this9.system_fetch = [];
+
+                for (x = lastloop; x < lastloopend; x++) {
+                  _this9.system_fetch.push(_this9.system_fetch_ids[x]);
+                }
+
+                _context9.next = 52;
+                return axios.post("https://esi.evetech.net/v2/universe/names/?datasource=tranquility", _this9.system_fetch);
+
+              case 52:
+                system_data_response = _context9.sent;
+                s = 0;
+
+              case 54:
+                if (!(s <= lastloopcount)) {
+                  _context9.next = 62;
+                  break;
+                }
+
+                if (!(typeof system_data_response.data[s] == "undefined" || system_data_response.data[s] === null)) {
+                  _context9.next = 58;
+                  break;
+                }
+
+                console.log("F");
+                return _context9.abrupt("continue", 59);
+
+              case 58:
+                _this9.system_data.push(system_data_response.data[s]);
+
+              case 59:
+                s++;
+                _context9.next = 54;
+                break;
+
+              case 62:
+                _this9.system_fetch = [];
+                _this9.fetching_systems = false;
+
+              case 64:
+              case "end":
+                return _context9.stop();
+            }
+          }
+        }, _callee9);
+      }))();
+    },
+    setStructureTypes: function setStructureTypes() {
+      var _this10 = this;
+
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
+        var l, i;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+          while (1) {
+            switch (_context10.prev = _context10.next) {
+              case 0:
+                l = _this10.info.length;
+
+                for (i = 0; i < l; i++) {
+                  if (_this10.info[i].structure_type_id == "32226") {
+                    _this10.info[i].structure_type_name = "TCU";
+                  }
+
+                  if (_this10.info[i].structure_type_id == "32458") {
+                    _this10.info[i].structure_type_name = "IHUB";
+                  }
+                }
+
+              case 2:
+              case "end":
+                return _context10.stop();
+            }
+          }
+        }, _callee10);
+      }))();
     },
     startCounterDown: function startCounterDown(item) {
       var today = new Date();
@@ -62206,13 +63177,46 @@ var render = function() {
           _c(
             "h1",
             [
-              _c("v-icon", { staticClass: "mr-2 grey--text lighten-1" }, [
+              _c("v-icon", { staticClass: "mr-5 blue--text" }, [
                 _vm._v("fa fa-rocket")
               ]),
-              _vm._v("ALLIANCES\n\t\t")
+              _vm._v("ESI TECH - ALLIANCES\n\t\t")
             ],
             1
           ),
+          _vm._v(" "),
+          _c("p", [
+            _vm.fetching_ids
+              ? _c("span", { staticClass: "ml-3 text-overline orange--text" }, [
+                  _vm._v(
+                    "Contacting ESI Tech API :: " +
+                      _vm._s(this.all_alliance_ids.length)
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.fetching_names && !_vm.fetching_ids
+              ? _c("span", { staticClass: "ml-3 text-overline blue--text" }, [
+                  _vm._v(
+                    "ESI Tech API Contection Success... Acquiring Alliance Data :: " +
+                      _vm._s(this.alliance_data.length) +
+                      "/" +
+                      _vm._s(this.all_alliance_ids.length)
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.loading && !_vm.fetching_names
+              ? _c("span", { staticClass: "ml-3 text-overline green--text" }, [
+                  _vm._v(
+                    "ESI Tech API Data Compilation Complete :: " +
+                      _vm._s(this.alliance_data.length) +
+                      "/" +
+                      _vm._s(this.all_alliance_ids.length)
+                  )
+                ])
+              : _vm._e()
+          ]),
           _vm._v(" "),
           _c(
             "v-card",
@@ -62240,6 +63244,7 @@ var render = function() {
               ),
               _vm._v(" "),
               _c("v-data-table", {
+                staticClass: "text-overline",
                 attrs: {
                   headers: _vm.headers,
                   items: _vm.alliances,
@@ -62265,6 +63270,21 @@ var render = function() {
                     }
                   },
                   {
+                    key: "item.id",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _c("v-icon", { staticClass: "mr-3 orange--text" }, [
+                          _vm._v("fas fa-fingerprint")
+                        ]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "text-overline" }, [
+                          _vm._v(_vm._s(item.id))
+                        ])
+                      ]
+                    }
+                  },
+                  {
                     key: "item.actions",
                     fn: function(ref) {
                       var item = ref.item
@@ -62276,7 +63296,22 @@ var render = function() {
                     }
                   }
                 ])
-              })
+              }),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { outlined: "" },
+                      on: { click: _vm.saveAllianceData }
+                    },
+                    [_vm._v("Save Data")]
+                  )
+                ],
+                1
+              )
             ],
             1
           )
@@ -62419,7 +63454,7 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "v-list-item",
-                { attrs: { link: "" } },
+                { attrs: { link: "", to: "/systems" } },
                 [
                   _c(
                     "v-list-item-action",
@@ -62435,7 +63470,7 @@ var render = function() {
                     "v-list-item-content",
                     [
                       _c("v-list-item-title", { staticClass: "grey--text" }, [
-                        _vm._v("Menu")
+                        _vm._v("Systems")
                       ])
                     ],
                     1
@@ -62480,7 +63515,7 @@ var render = function() {
       _c(
         "v-app-bar",
         {
-          staticClass: "top-border--teal",
+          staticClass: "top-border--orange",
           attrs: {
             height: "100px",
             app: "",
@@ -62782,6 +63817,184 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Systems.vue?vue&type=template&id=7ea69356&":
+/*!*****************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Systems.vue?vue&type=template&id=7ea69356& ***!
+  \*****************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    [
+      _c(
+        "v-container",
+        { attrs: { dark: "" } },
+        [
+          _c(
+            "h1",
+            [
+              _c("v-icon", { staticClass: "mr-5 blue--text" }, [
+                _vm._v("fa fa-rocket")
+              ]),
+              _vm._v("ESI TECH - SYSTEMS\n\t\t")
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("p", [
+            _vm.fetching_ids
+              ? _c("span", { staticClass: "ml-3 text-overline orange--text" }, [
+                  _vm._v(
+                    "Contacting ESI Tech API :: " +
+                      _vm._s(this.all_system_ids.length)
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.fetching_names && !_vm.fetching_ids
+              ? _c("span", { staticClass: "ml-3 text-overline blue--text" }, [
+                  _vm._v(
+                    "ESI Tech API Contection Success... Acquiring System Data :: " +
+                      _vm._s(this.system_data.length) +
+                      "/" +
+                      _vm._s(this.all_system_ids.length)
+                  )
+                ])
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.loading
+              ? _c("span", { staticClass: "ml-3 text-overline green--text" }, [
+                  _vm._v(
+                    "ESI Tech API Data Compilation Complete :: " +
+                      _vm._s(this.system_data.length) +
+                      "/" +
+                      _vm._s(this.all_system_ids.length)
+                  )
+                ])
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c(
+            "v-card",
+            [
+              _c(
+                "v-card-text",
+                [
+                  _c("v-text-field", {
+                    attrs: {
+                      "append-icon": "fa fa-search",
+                      label: "Search",
+                      "single-line": "",
+                      "hide-details": ""
+                    },
+                    model: {
+                      value: _vm.search,
+                      callback: function($$v) {
+                        _vm.search = $$v
+                      },
+                      expression: "search"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c("v-data-table", {
+                staticClass: "text-overline",
+                attrs: {
+                  headers: _vm.headers,
+                  items: _vm.systems,
+                  "item-key": "id",
+                  loading: _vm.loading,
+                  "loading-text": "Loading...",
+                  search: _vm.search,
+                  "sort-by": "name",
+                  "must-sort": ""
+                },
+                scopedSlots: _vm._u([
+                  {
+                    key: "item.name",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _c("v-icon", { staticClass: "mr-3 blue--text" }, [
+                          _vm._v("fab fa-connectdevelop")
+                        ]),
+                        _vm._v(
+                          "\n\t\t\t\t\t" + _vm._s(item.name) + "\n\t\t\t\t"
+                        )
+                      ]
+                    }
+                  },
+                  {
+                    key: "item.id",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _c("v-icon", { staticClass: "mr-3 orange--text" }, [
+                          _vm._v("fas fa-fingerprint")
+                        ]),
+                        _vm._v(" "),
+                        _c("span", { staticClass: "text-overline" }, [
+                          _vm._v(_vm._s(item.id))
+                        ])
+                      ]
+                    }
+                  },
+                  {
+                    key: "item.actions",
+                    fn: function(ref) {
+                      var item = ref.item
+                      return [
+                        _c("v-btn", [_vm._v("Action")]),
+                        _vm._v(" "),
+                        _c("v-btn", [_vm._v("Action")])
+                      ]
+                    }
+                  }
+                ])
+              }),
+              _vm._v(" "),
+              _c(
+                "v-card-actions",
+                [
+                  _c(
+                    "v-btn",
+                    {
+                      attrs: { outlined: "" },
+                      on: { click: _vm.saveSystemData }
+                    },
+                    [_vm._v("Save Data")]
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Updates.vue?vue&type=template&id=0c02000a&":
 /*!*****************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/views/Updates.vue?vue&type=template&id=0c02000a& ***!
@@ -62802,222 +64015,305 @@ var render = function() {
     [
       _c(
         "div",
-        { staticClass: "mx-5 pt-md-6rem" },
+        { staticClass: "ma-5" },
         [
-          _c("v-row", [
-            _c(
-              "h1",
-              [
-                _vm._v("\n\t\t\t\tLATEST DATA\n\t\t\t\t"),
-                _c(
-                  "v-btn",
-                  {
-                    staticClass: "ml-3",
-                    on: {
-                      click: function($event) {
-                        return _vm.getAlliancesIDs()
-                      }
-                    }
-                  },
+          _c("p", [
+            _vm.loading && !_vm.fetching_names
+              ? _c(
+                  "span",
+                  { staticClass: "ml-3 text-overline orange--text" },
                   [
-                    _c("v-icon", { staticClass: "mr-3 grey--text lighten-1" }, [
-                      _vm._v("fa fa-sync")
-                    ]),
-                    _vm._v("getAlliancesIDs\n\t\t\t\t")
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-btn",
-                  {
-                    staticClass: "ml-3",
-                    on: {
-                      click: function($event) {
-                        return _vm.getAllianceNames()
-                      }
-                    }
-                  },
-                  [
-                    _c("v-icon", { staticClass: "mr-3 grey--text lighten-1" }, [
-                      _vm._v("fa fa-sync")
-                    ]),
                     _vm._v(
-                      "\n\t\t\t\t\t" +
-                        _vm._s(_vm.alliance_message) +
-                        "\n\t\t\t\t"
-                    )
-                  ],
-                  1
-                ),
-                _vm._v(" "),
-                _c(
-                  "v-btn",
-                  {
-                    staticClass: "ml-3",
-                    attrs: { loading: _vm.saving_alliance_data },
-                    on: {
-                      click: function($event) {
-                        return _vm.saveAllianceData()
-                      }
-                    }
-                  },
-                  [
-                    _c("v-icon", { staticClass: "mr-3 grey--text lighten-1" }, [
-                      _vm._v("fa fa-save")
-                    ]),
-                    _vm._v(
-                      "\n\t\t\t\t\t" +
-                        _vm._s(_vm.saving_alliances_message) +
-                        "\n\t\t\t\t"
-                    )
+                      "\n\t\t\t\t\tContacting ESI EveTech API :: Downloading data...\n\t\t\t\t\t"
+                    ),
+                    _c("v-icon", { staticClass: "mx-3 orange--text" }, [
+                      _vm._v("fas fa-satellite-dish fa-sm fa-fw")
+                    ])
                   ],
                   1
                 )
-              ],
-              1
-            )
-          ]),
-          _vm._v(" "),
-          _c("v-row", [
-            _c("h1", [
-              _vm._v(
-                "Alliances in ESI Database: " +
-                  _vm._s(this.all_alliance_ids.length)
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _c("v-row", [
-            _c("h1", [
-              _vm._v(
-                "Alliances names pulled from ESI Database: " +
-                  _vm._s(this.alliance_data.length)
-              )
-            ])
-          ]),
-          _vm._v(" "),
-          _vm.getNamesDone == "eggs"
-            ? _c("v-data-table", {
-                staticClass: "elevation-1",
-                attrs: {
-                  headers: _vm.headers,
-                  items: _vm.info,
-                  loading: !_vm.getNamesDone,
-                  "loading-text": "Loading... Please wait",
-                  "item-key": "key"
-                },
-                scopedSlots: _vm._u(
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.fetching_names || _vm.fetching_systems
+              ? _c(
+                  "span",
+                  { staticClass: "ml-3 text-overline green--text" },
                   [
-                    {
-                      key: "item.alliance_name",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _vm._v(
-                            "\n\t\t\t\t" +
-                              _vm._s(item.alliance_name) +
-                              "\n\t\t\t"
-                          )
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.system_name",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _c("v-chip", [
-                            _vm._v(
-                              "\n\t\t\t\t\t" +
-                                _vm._s(item.system_name) +
-                                "\n\t\t\t\t"
-                            )
-                          ])
-                        ]
-                      }
-                    },
-                    {
-                      key: "item.vulnerable_start_time",
-                      fn: function(ref) {
-                        var item = ref.item
-                        return [
-                          _vm.startCounterDown(item) > 0
-                            ? _c("countdown", {
-                                staticClass: "red--text",
-                                attrs: {
-                                  time: _vm.startCounterDown(item),
-                                  "auto-start": ""
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "default",
-                                      fn: function(props) {
-                                        return [
-                                          _vm._v(
-                                            "\n\t\t\t\t\t\tVulnerable In: " +
-                                              _vm._s(props.days) +
-                                              " days, " +
-                                              _vm._s(props.hours) +
-                                              " hours,\n\t\t\t\t\t\t" +
-                                              _vm._s(props.minutes) +
-                                              " minutes,\n\t\t\t\t\t\t" +
-                                              _vm._s(props.seconds) +
-                                              " seconds.\n\t\t\t\t\t"
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                )
-                              })
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _vm.endCounterDown(item) > 0
-                            ? _c("countdown", {
-                                staticClass: "teal--text",
-                                attrs: {
-                                  time: _vm.endCounterDown(item),
-                                  "auto-start": ""
-                                },
-                                scopedSlots: _vm._u(
-                                  [
-                                    {
-                                      key: "default",
-                                      fn: function(props) {
-                                        return [
-                                          _vm._v(
-                                            "\n\t\t\t\t\t\tVulnerable Remaining: " +
-                                              _vm._s(props.days) +
-                                              " days,\n\t\t\t\t\t\t" +
-                                              _vm._s(props.hours) +
-                                              " hours, " +
-                                              _vm._s(props.minutes) +
-                                              " minutes,\n\t\t\t\t\t\t" +
-                                              _vm._s(props.seconds) +
-                                              " seconds.\n\t\t\t\t\t"
-                                          )
-                                        ]
-                                      }
-                                    }
-                                  ],
-                                  null,
-                                  true
-                                )
-                              })
-                            : _vm._e()
-                        ]
-                      }
-                    }
+                    _vm._v(
+                      "\n\t\t\t\t\tESI EveTech API Connection :: Successful\n\t\t\t\t\t"
+                    ),
+                    _c("v-icon", { staticClass: "mx-3 green--text" }, [
+                      _vm._v("fas fa-check fa-sm fa-fw")
+                    ])
                   ],
-                  null,
-                  false,
-                  1513496986
+                  1
                 )
-              })
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm.fetching_names && !_vm.fetching_systems
+              ? _c(
+                  "span",
+                  { staticClass: "ml-3 text-overline blue--text" },
+                  [
+                    _vm._v(
+                      "\n\t\t\t\t\tESI EveTech API Contection Success... Acquiring Alliance Data :: " +
+                        _vm._s(this.alliance_data.length) +
+                        "/" +
+                        _vm._s(this.all_alliance_ids.length) +
+                        "\n\t\t\t\t\t"
+                    ),
+                    _c("v-icon", { staticClass: "mx-3 blue--text" }, [
+                      _vm._v("fa fa-cloud-download-alt fa-sm fa-fw")
+                    ])
+                  ],
+                  1
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.fetching_systems
+              ? _c(
+                  "span",
+                  { staticClass: "ml-3 text-overline green--text" },
+                  [
+                    _vm._v(
+                      "\n\t\t\t\t\tESI EveTech API Data Compilation Complete :: " +
+                        _vm._s(this.alliance_data.length) +
+                        "/" +
+                        _vm._s(this.all_alliance_ids.length) +
+                        "\n\t\t\t\t\t"
+                    ),
+                    _c("v-icon", { staticClass: "mx-3 green--text" }, [
+                      _vm._v("fas fa-check fa-sm fa-fw")
+                    ])
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("p", [
+            _vm.fetching_systems
+              ? _c(
+                  "span",
+                  { staticClass: "ml-3 text-overline orange--text" },
+                  [
+                    _vm._v(
+                      "\n\t\t\t\t\tContacting ESI EveTech API :: Acquiring System Data... " +
+                        _vm._s(this.system_data.length) +
+                        "\n\t\t\t\t\t"
+                    ),
+                    _c("v-icon", { staticClass: "mx-3 orange--text" }, [
+                      _vm._v("fas fa-network-wired fa-sm fa-fw")
+                    ])
+                  ],
+                  1
+                )
+              : _vm._e()
+          ]),
+          _vm._v(" "),
+          _vm.loading
+            ? _c(
+                "v-card",
+                [
+                  _c("v-progress-linear", {
+                    attrs: { indeterminate: "", color: "blue" }
+                  })
+                ],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.loading && !_vm.fetching_names && !_vm.fetching_systems
+            ? _c(
+                "v-card",
+                [
+                  _c("v-card-title", [
+                    _vm._v("Sovereignty Structure Vulnerability Data")
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "v-card-text",
+                    [
+                      _c("v-text-field", {
+                        attrs: {
+                          "append-icon": "fa fa-search",
+                          label: "Search",
+                          "single-line": "",
+                          "hide-details": ""
+                        },
+                        model: {
+                          value: _vm.search,
+                          callback: function($$v) {
+                            _vm.search = $$v
+                          },
+                          expression: "search"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c("v-data-table", {
+                    staticClass: "elevation-1",
+                    attrs: {
+                      loading:
+                        _vm.fetching_names &&
+                        _vm.loading &&
+                        _vm.fetching_systems,
+                      "loading-text": "Downloading data from ESI EveTech...",
+                      headers: _vm.headers,
+                      items: _vm.info,
+                      "item-key": "key",
+                      search: _vm.search,
+                      "sort-by": "name",
+                      "must-sort": ""
+                    },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "item.name",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _vm.endCounterDown(item) > 0
+                                ? _c(
+                                    "v-icon",
+                                    {
+                                      staticClass: "mr-3",
+                                      attrs: { color: "red" }
+                                    },
+                                    [_vm._v("mdi-death-star-variant")]
+                                  )
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.startCounterDown(item) > 0
+                                ? _c(
+                                    "v-icon",
+                                    {
+                                      staticClass: "mr-3",
+                                      attrs: { color: "green" }
+                                    },
+                                    [_vm._v("mdi-shield-star-outline")]
+                                  )
+                                : _vm._e(),
+                              _vm._v(
+                                "\n            " +
+                                  _vm._s(item.name) +
+                                  "\n\t\t\t\t\t"
+                              )
+                            ]
+                          }
+                        },
+                        {
+                          key: "item.system_name",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _c(
+                                "v-icon",
+                                {
+                                  staticClass: "mr-3",
+                                  attrs: { color: "yellow" }
+                                },
+                                [_vm._v("mdi-star-four-points-outline")]
+                              ),
+                              _vm._v(" "),
+                              _c("span", { staticClass: "yellow--text" }, [
+                                _vm._v(
+                                  "\n\t\t\t\t\t\t\t" +
+                                    _vm._s(item.system_name) +
+                                    "\n\t\t\t\t\t\t"
+                                )
+                              ])
+                            ]
+                          }
+                        },
+                        {
+                          key: "item.vulnerable_start_time",
+                          fn: function(ref) {
+                            var item = ref.item
+                            return [
+                              _vm.startCounterDown(item) > 0
+                                ? _c("countdown", {
+                                    staticClass: "yellow--text",
+                                    attrs: {
+                                      time: _vm.startCounterDown(item),
+                                      "auto-start": ""
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(props) {
+                                            return [
+                                              _vm._v(
+                                                "\n\t\t\t\t\t\t\t\tWarning: " +
+                                                  _vm._s(props.days) +
+                                                  " days, " +
+                                                  _vm._s(props.hours) +
+                                                  " hours,\n\t\t\t\t\t\t\t\t" +
+                                                  _vm._s(props.minutes) +
+                                                  " minutes,\n\t\t\t\t\t\t\t\t" +
+                                                  _vm._s(props.seconds) +
+                                                  " seconds until in danger\n\t\t\t\t\t\t\t"
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      true
+                                    )
+                                  })
+                                : _vm._e(),
+                              _vm._v(" "),
+                              _vm.endCounterDown(item) > 0
+                                ? _c("countdown", {
+                                    staticClass: "red--text",
+                                    attrs: {
+                                      time: _vm.endCounterDown(item),
+                                      "auto-start": ""
+                                    },
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "default",
+                                          fn: function(props) {
+                                            return [
+                                              _vm._v(
+                                                "\n\t\t\t\t\t\t\t\tVulnerable - " +
+                                                  _vm._s(props.days) +
+                                                  " days,\n\t\t\t\t\t\t\t\t" +
+                                                  _vm._s(props.hours) +
+                                                  " hours, " +
+                                                  _vm._s(props.minutes) +
+                                                  " minutes,\n\t\t\t\t\t\t\t\t" +
+                                                  _vm._s(props.seconds) +
+                                                  " seconds remaining\n\t\t\t\t\t\t\t"
+                                              )
+                                            ]
+                                          }
+                                        }
+                                      ],
+                                      null,
+                                      true
+                                    )
+                                  })
+                                : _vm._e()
+                            ]
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      1999404713
+                    )
+                  })
+                ],
+                1
+              )
             : _vm._e()
         ],
         1
@@ -63056,7 +64352,7 @@ var render = function() {
               _vm._v(" "),
               _c("v-card-text", [
                 _vm._v(
-                  "\n\t\t\t\tWe are saving the latest data from ESI to our database. Please be\n\t\t\t\tpatient.\n\t\t\t"
+                  "\n\t\t\t\t\tWe are saving the latest data from ESI to our database. Please be\n\t\t\t\t\tpatient.\n\t\t\t\t"
                 )
               ])
             ],
@@ -66263,8 +67559,8 @@ if (inBrowser && window.Vue) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(global, setImmediate) {/*!
- * Vue.js v2.6.11
- * (c) 2014-2019 Evan You
+ * Vue.js v2.6.12
+ * (c) 2014-2020 Evan You
  * Released under the MIT License.
  */
 
@@ -71703,7 +72999,7 @@ Object.defineProperty(Vue, 'FunctionalRenderContext', {
   value: FunctionalRenderContext
 });
 
-Vue.version = '2.6.11';
+Vue.version = '2.6.12';
 
 /*  */
 
@@ -73909,7 +75205,7 @@ function updateDOMProps (oldVnode, vnode) {
       // skip the update if old and new VDOM state is the same.
       // `value` is handled separately because the DOM value may be temporarily
       // out of sync with VDOM state due to focus, composition and modifiers.
-      // This  #4521 by skipping the unnecesarry `checked` update.
+      // This  #4521 by skipping the unnecessary `checked` update.
       cur !== oldProps[key]
     ) {
       // some property updates can throw
@@ -76154,7 +77450,7 @@ function parse (
       }
     },
     comment: function comment (text, start, end) {
-      // adding anyting as a sibling to the root node is forbidden
+      // adding anything as a sibling to the root node is forbidden
       // comments should still be allowed, but ignored
       if (currentParent) {
         var child = {
@@ -123831,6 +125127,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_Home__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./views/Home */ "./resources/js/views/Home.vue");
 /* harmony import */ var _views_Updates__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./views/Updates */ "./resources/js/views/Updates.vue");
 /* harmony import */ var _views_Alliances__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./views/Alliances */ "./resources/js/views/Alliances.vue");
+/* harmony import */ var _views_Systems__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./views/Systems */ "./resources/js/views/Systems.vue");
+
 
 
 
@@ -123861,6 +125159,10 @@ vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODU
     path: '/alliances',
     name: 'alliances',
     component: _views_Alliances__WEBPACK_IMPORTED_MODULE_4__["default"]
+  }, {
+    path: '/systems',
+    name: 'systems',
+    component: _views_Systems__WEBPACK_IMPORTED_MODULE_5__["default"]
   }] // scrollBehavior(to, from, savedPosition) {
   //   return { x: 0, y: 0 }
   // },
@@ -124113,6 +125415,75 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_63cd6604___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Home_vue_vue_type_template_id_63cd6604___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/views/Systems.vue":
+/*!****************************************!*\
+  !*** ./resources/js/views/Systems.vue ***!
+  \****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Systems_vue_vue_type_template_id_7ea69356___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Systems.vue?vue&type=template&id=7ea69356& */ "./resources/js/views/Systems.vue?vue&type=template&id=7ea69356&");
+/* harmony import */ var _Systems_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Systems.vue?vue&type=script&lang=js& */ "./resources/js/views/Systems.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _Systems_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _Systems_vue_vue_type_template_id_7ea69356___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _Systems_vue_vue_type_template_id_7ea69356___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/views/Systems.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/views/Systems.vue?vue&type=script&lang=js&":
+/*!*****************************************************************!*\
+  !*** ./resources/js/views/Systems.vue?vue&type=script&lang=js& ***!
+  \*****************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Systems_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./Systems.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Systems.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_Systems_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/views/Systems.vue?vue&type=template&id=7ea69356&":
+/*!***********************************************************************!*\
+  !*** ./resources/js/views/Systems.vue?vue&type=template&id=7ea69356& ***!
+  \***********************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Systems_vue_vue_type_template_id_7ea69356___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./Systems.vue?vue&type=template&id=7ea69356& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/views/Systems.vue?vue&type=template&id=7ea69356&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Systems_vue_vue_type_template_id_7ea69356___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Systems_vue_vue_type_template_id_7ea69356___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 
